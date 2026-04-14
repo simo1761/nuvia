@@ -21,10 +21,14 @@ export async function appendOrderToSheet(order: OrderData): Promise<void> {
     throw new Error('Missing Google Sheets configuration');
   }
 
-  let credentials: object;
+  let credentials: any;
   try {
     credentials = JSON.parse(credentialsJson);
-    console.log('[SHEETS] Credentials parsed OK — client_email:', (credentials as any).client_email);
+    // Vercel stores env vars as plain strings — literal \n must become real newlines
+    if (credentials.private_key) {
+      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+    }
+    console.log('[SHEETS] Credentials parsed OK — client_email:', credentials.client_email);
   } catch (e) {
     throw new Error('Failed to parse GOOGLE_SHEETS_CREDENTIALS JSON: ' + (e instanceof Error ? e.message : String(e)));
   }
