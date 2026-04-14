@@ -14,12 +14,22 @@ export async function appendOrderToSheet(order: OrderData): Promise<void> {
   const credentialsJson = process.env.GOOGLE_SHEETS_CREDENTIALS;
   const sheetId = process.env.GOOGLE_SHEET_ID;
 
+  console.log('[SHEETS] GOOGLE_SHEET_ID present:', !!sheetId);
+  console.log('[SHEETS] GOOGLE_SHEETS_CREDENTIALS present:', !!credentialsJson);
+
   if (!credentialsJson || !sheetId) {
     throw new Error('Missing Google Sheets configuration');
   }
 
-  const credentials = JSON.parse(credentialsJson);
+  let credentials: object;
+  try {
+    credentials = JSON.parse(credentialsJson);
+    console.log('[SHEETS] Credentials parsed OK — client_email:', (credentials as any).client_email);
+  } catch (e) {
+    throw new Error('Failed to parse GOOGLE_SHEETS_CREDENTIALS JSON: ' + (e instanceof Error ? e.message : String(e)));
+  }
 
+  console.log('[SHEETS] Creating GoogleAuth...');
   const auth = new google.auth.GoogleAuth({
     credentials,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
@@ -41,28 +51,37 @@ export async function appendOrderToSheet(order: OrderData): Promise<void> {
   // COD Network column order — exact:
   // OrderDate | country | name | phone | address | url | sku | Product | quantity | price | currency | notes | utm | national_address
   const row = [
-    orderDate,       // OrderDate   — auto
-    order.country,   // country     — from form
-    order.name,      // name        — from form
-    order.phone,     // phone       — from form
-    order.city,      // address     — city from form
-    '',              // url         — empty
-    order.sku,       // sku         — from product
-    '',              // Product     — empty
-    1,               // quantity    — always 1
-    order.price,     // price       — from product
-    order.currency,  // currency    — SAR
-    '',              // notes       — empty
-    '',              // utm         — empty
+    orderDate,       // OrderDate        — auto
+    order.country,   // country          — from form
+    order.name,      // name             — from form
+    order.phone,     // phone            — from form
+    order.city,      // address          — city from form
+    '',              // url              — empty
+    order.sku,       // sku              — from product
+    '',              // Product          — empty
+    1,               // quantity         — always 1
+    order.price,     // price            — from product
+    order.currency,  // currency         — SAR
+    '',              // notes            — empty
+    '',              // utm              — empty
     '',              // national_address — empty
   ];
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: sheetId,
-    range: 'Sheet1!A:N',
-    valueInputOption: 'RAW',
-    requestBody: {
-      values: [row],
-    },
-  });
+  console.log('[SHEETS] Row to append:', row);
+
+  try {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: sheetId,
+      range: 'Sheet1!A:N',
+      valueInputOption: 'RAW',
+      requestBody: { values: [row] },
+    });
+    console.log('[SHEETS] Append successful');
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    const details = (e as any)?.response?.data ?? '';
+    console.error('[SHEETS] Append failed:', msg);
+    if (details) console.error('[SHEETS] API response:', JSON.stringify(details));
+    throw e;
+  }
 }
