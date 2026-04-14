@@ -1,0 +1,47 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F4F8F7"/>
+      <stop offset="100%" style="stop-color:#E0F0ED"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C9A96E"/>
+      <stop offset="100%" style="stop-color:#8B6914"/>
+    </linearGradient>
+    <linearGradient id="head" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2D5A52"/>
+      <stop offset="100%" style="stop-color:#1A3A34"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="260" r="145" fill="#C9A96E" opacity="0.07"/>
+  <!-- Brush handle (diagonal) -->
+  <rect x="195" y="140" width="52" height="200" rx="26" fill="url(#handle)" transform="rotate(30 220 240)"/>
+  <!-- Handle texture lines -->
+  <line x1="210" y1="175" x2="242" y2="175" stroke="white" stroke-width="2" opacity="0.3" transform="rotate(30 220 240)"/>
+  <line x1="210" y1="195" x2="242" y2="195" stroke="white" stroke-width="2" opacity="0.3" transform="rotate(30 220 240)"/>
+  <line x1="210" y1="215" x2="242" y2="215" stroke="white" stroke-width="2" opacity="0.3" transform="rotate(30 220 240)"/>
+  <!-- Brush head -->
+  <ellipse cx="310" cy="305" rx="75" ry="45" fill="url(#head)" transform="rotate(30 310 305)"/>
+  <!-- Bristles -->
+  <g opacity="0.7" transform="rotate(30 310 305)">
+    <rect x="245" y="310" width="4" height="14" rx="2" fill="#C9A96E"/>
+    <rect x="257" y="308" width="4" height="16" rx="2" fill="#C9A96E"/>
+    <rect x="269" y="307" width="4" height="17" rx="2" fill="#C9A96E"/>
+    <rect x="281" y="308" width="4" height="16" rx="2" fill="#C9A96E"/>
+    <rect x="293" y="310" width="4" height="14" rx="2" fill="#C9A96E"/>
+    <rect x="305" y="311" width="4" height="13" rx="2" fill="#C9A96E"/>
+    <rect x="317" y="310" width="4" height="14" rx="2" fill="#C9A96E"/>
+    <rect x="329" y="311" width="4" height="13" rx="2" fill="#C9A96E"/>
+    <rect x="341" y="312" width="4" height="12" rx="2" fill="#C9A96E"/>
+  </g>
+  <!-- Stars/sparkles -->
+  <text x="395" y="180" font-family="sans-serif" font-size="22" fill="#C9A96E" opacity="0.6">✦</text>
+  <text x="165" y="350" font-family="sans-serif" font-size="16" fill="#C9A96E" opacity="0.4">✦</text>
+  <text x="400" y="340" font-family="sans-serif" font-size="14" fill="#C9A96E" opacity="0.4">✦</text>
+  <!-- Text -->
+  <text x="300" y="415" font-family="sans-serif" font-size="20" font-weight="bold" fill="#1A1A2E" text-anchor="middle">فرشاة التدليك الاحترافية</text>
+  <text x="300" y="445" font-family="sans-serif" font-size="15" fill="#B08D4F" text-anchor="middle">Professional Massage Brush</text>
+  <text x="300" y="478" font-family="sans-serif" font-size="13" fill="#C9A96E" text-anchor="middle" opacity="0.8">نوفيا كلينيك</text>
+  <rect x="120" y="498" width="360" height="3" rx="2" fill="#C9A96E" opacity="0.4"/>
+</svg>

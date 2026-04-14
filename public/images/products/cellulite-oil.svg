@@ -1,0 +1,34 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8F0"/>
+      <stop offset="100%" style="stop-color:#FCE8C8"/>
+    </linearGradient>
+    <linearGradient id="bottle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8A84E"/>
+      <stop offset="100%" style="stop-color:#C9A96E"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <!-- Glow -->
+  <circle cx="300" cy="260" r="140" fill="#C9A96E" opacity="0.08"/>
+  <!-- Oil bottle shape -->
+  <path d="M260 160 Q260 140 300 135 Q340 140 340 160 L350 200 Q360 220 360 310 Q360 380 300 380 Q240 380 240 310 L240 200 Q240 220 260 200 Z" fill="url(#bottle)" opacity="0.9"/>
+  <!-- Bottle neck/cap -->
+  <rect x="282" y="120" width="36" height="45" rx="8" fill="#B08D4F"/>
+  <!-- Label -->
+  <rect x="255" y="240" width="90" height="70" rx="8" fill="white" opacity="0.7"/>
+  <text x="300" y="265" font-family="sans-serif" font-size="10" fill="#1A1A2E" text-anchor="middle" font-weight="bold">NUVIA</text>
+  <text x="300" y="282" font-family="sans-serif" font-size="8" fill="#B08D4F" text-anchor="middle">CELLULITE OIL</text>
+  <!-- Drops -->
+  <ellipse cx="220" cy="290" rx="10" ry="14" fill="#C9A96E" opacity="0.5"/>
+  <ellipse cx="210" cy="308" rx="7" ry="10" fill="#C9A96E" opacity="0.35"/>
+  <ellipse cx="380" cy="275" rx="8" ry="12" fill="#C9A96E" opacity="0.4"/>
+  <!-- Shine -->
+  <ellipse cx="278" cy="200" rx="7" ry="18" fill="white" opacity="0.35" transform="rotate(-10 278 200)"/>
+  <!-- Text -->
+  <text x="300" y="418" font-family="sans-serif" font-size="22" font-weight="bold" fill="#1A1A2E" text-anchor="middle">زيت نوفيا للسيلوليت</text>
+  <text x="300" y="448" font-family="sans-serif" font-size="15" fill="#B08D4F" text-anchor="middle">Cellulite Oil</text>
+  <text x="300" y="480" font-family="sans-serif" font-size="13" fill="#C9A96E" text-anchor="middle" opacity="0.8">نوفيا كلينيك</text>
+  <rect x="120" y="500" width="360" height="3" rx="2" fill="#C9A96E" opacity="0.4"/>
+</svg>

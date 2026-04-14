@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Fonts loaded via next/font/google in layout.tsx — no @import needed */
+
+:root {
+  --color-primary: #C9A96E;
+  --color-primary-dark: #B08D4F;
+  --color-secondary: #1A1A2E;
+  --color-accent: #E8D5B7;
+  --color-bg: #FEFCF9;
+  --color-bg-alt: #F7F3ED;
+  --color-text: #2D2D2D;
+  --color-text-light: #6B6B6B;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Tajawal', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* RTL utilities */
+[dir="rtl"] .rtl\:text-right {
+  text-align: right;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* Order button pulse — opacity-only on pseudo-element = fully composited (GPU) */
+@keyframes pulse-gold-opacity {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1;   }
+}
+
+.order-btn-pulse {
+  position: relative;
+  box-shadow: 0 4px 15px rgba(201, 169, 110, 0.4);
+}
+.order-btn-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: 0 4px 28px rgba(201, 169, 110, 0.75);
+  animation: pulse-gold-opacity 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Story progress bar keyframe */
+@keyframes story {
+  from { width: 0% }
+  to   { width: 100% }
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Accordion transition */
+.accordion-content {
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Image placeholder */
+.img-placeholder {
+  background: linear-gradient(135deg, #F7F3ED 0%, #E8D5B7 100%);
+}
