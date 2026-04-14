@@ -21,21 +21,35 @@ export async function appendOrderToSheet(order: OrderData): Promise<void> {
     throw new Error('Missing Google Sheets configuration');
   }
 
-  let credentials: any;
+  let clientEmail: string;
+  let privateKey: string;
+
   try {
-    credentials = JSON.parse(credentialsJson);
-    // Vercel stores env vars as plain strings — literal \n must become real newlines
-    if (credentials.private_key) {
-      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
-    }
-    console.log('[SHEETS] Credentials parsed OK — client_email:', credentials.client_email);
+    const raw = JSON.parse(credentialsJson);
+
+    clientEmail = raw.client_email;
+
+    // Robust key fix for Vercel (Node 18 + OpenSSL 3):
+    // 1. split on the literal two-char sequence \n and rejoin with real newlines
+    // 2. trim() removes any stray whitespace/CR around the PEM block
+    privateKey = (raw.private_key as string)
+      .split(String.raw`\n`)
+      .join('\n')
+      .trim();
+
+    console.log('[SHEETS] client_email:', clientEmail);
+    console.log('[SHEETS] private_key starts with:', privateKey.slice(0, 40));
   } catch (e) {
-    throw new Error('Failed to parse GOOGLE_SHEETS_CREDENTIALS JSON: ' + (e instanceof Error ? e.message : String(e)));
+    throw new Error(
+      'Failed to parse GOOGLE_SHEETS_CREDENTIALS: ' +
+      (e instanceof Error ? e.message : String(e))
+    );
   }
 
-  console.log('[SHEETS] Creating GoogleAuth...');
-  const auth = new google.auth.GoogleAuth({
-    credentials,
+  // Use JWT directly — more reliable than GoogleAuth on Vercel / Node 18
+  const auth = new google.auth.JWT({
+    email: clientEmail,
+    key: privateKey,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
 
@@ -43,32 +57,35 @@ export async function appendOrderToSheet(order: OrderData): Promise<void> {
 
   // Date format: DD/MM/YYYY HH:MM
   const now = new Date();
-  const orderDate = [
-    String(now.getDate()).padStart(2, '0'),
-    String(now.getMonth() + 1).padStart(2, '0'),
-    now.getFullYear(),
-  ].join('/') + ' ' + [
-    String(now.getHours()).padStart(2, '0'),
-    String(now.getMinutes()).padStart(2, '0'),
-  ].join(':');
+  const orderDate =
+    [
+      String(now.getDate()).padStart(2, '0'),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      now.getFullYear(),
+    ].join('/') +
+    ' ' +
+    [
+      String(now.getHours()).padStart(2, '0'),
+      String(now.getMinutes()).padStart(2, '0'),
+    ].join(':');
 
-  // COD Network column order — exact:
+  // COD Network column order — exact (14 columns):
   // OrderDate | country | name | phone | address | url | sku | Product | quantity | price | currency | notes | utm | national_address
   const row = [
-    orderDate,       // OrderDate        — auto
-    order.country,   // country          — from form
-    order.name,      // name             — from form
-    order.phone,     // phone            — from form
-    order.city,      // address          — city from form
-    '',              // url              — empty
-    order.sku,       // sku              — from product
-    '',              // Product          — empty
-    1,               // quantity         — always 1
-    order.price,     // price            — from product
-    order.currency,  // currency         — SAR
-    '',              // notes            — empty
-    '',              // utm              — empty
-    '',              // national_address — empty
+    orderDate,      // OrderDate        — auto
+    order.country,  // country          — from form
+    order.name,     // name             — from form
+    order.phone,    // phone            — from form
+    order.city,     // address          — city from form
+    '',             // url              — empty
+    order.sku,      // sku              — from product
+    '',             // Product          — empty
+    1,              // quantity         — always 1
+    order.price,    // price            — from product
+    order.currency, // currency         — SAR
+    '',             // notes            — empty
+    '',             // utm              — empty
+    '',             // national_address — empty
   ];
 
   console.log('[SHEETS] Row to append:', row);
