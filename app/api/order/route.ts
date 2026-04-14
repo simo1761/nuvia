@@ -4,7 +4,7 @@ import { appendOrderToSheet } from '@/lib/google-sheets';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, phone, city, country, sku, product, price, currency } = body;
+    const { name, phone, city, country, sku, price, currency } = body;
 
     // Basic validation
     if (!name || !phone || !city || !country || !sku) {
@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Phone validation: must be at least 9 digits
-    const cleanPhone = phone.replace(/\s+/g, '').replace(/-/g, '');
+    // Phone: strip spaces and dashes, must be 9–15 digits
+    const cleanPhone = phone.replace(/[\s\-]/g, '');
     if (!/^\+?\d{9,15}$/.test(cleanPhone)) {
       return NextResponse.json(
         { error: 'رقم الهاتف غير صحيح' },
@@ -29,13 +29,12 @@ export async function POST(req: NextRequest) {
       city,
       country,
       sku,
-      product,
       price,
       currency,
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Order API error:', err);
     return NextResponse.json(
       { error: 'حدث خطأ في معالجة الطلب. يرجى المحاولة مرة أخرى.' },
