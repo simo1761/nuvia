@@ -12,7 +12,7 @@ interface CheckoutFormProps {
 type Status  = 'idle' | 'loading' | 'success' | 'error';
 type OtpStep = 'hidden' | 'prompt' | 'counting' | 'skip';
 
-const COUNTDOWN_SEC = 20;
+const COUNTDOWN_SEC = 15;
 
 const countries = [
   { code: 'SA', name: 'المملكة العربية السعودية', flag: '🇸🇦' },
@@ -25,8 +25,8 @@ const countries = [
 
 function maskPhone(phone: string) {
   const digits = phone.replace(/\D/g, '');
-  if (digits.length < 4) return phone;
-  return '•'.repeat(digits.length - 3) + digits.slice(-3);
+  if (digits.length < 5) return phone;
+  return digits.slice(0, 4) + '•'.repeat(digits.length - 4);
 }
 
 export default function CheckoutForm({ product }: CheckoutFormProps) {
@@ -192,10 +192,7 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
                   <p className="text-nuvia-light text-xs">
                     يرجى الانتظار {countdown} ثانية
                   </p>
-                  {/* Disabled skip placeholder */}
-                  <button disabled className="w-full mt-4 py-3 rounded-2xl font-semibold text-sm text-nuvia-light bg-bg-alt cursor-not-allowed opacity-50">
-                    لم يصلني الرمز — تخطي هذه الخطوة
-                  </button>
+                  {/* Skip button hidden during countdown */}
                 </>
               )}
 
