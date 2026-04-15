@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Product } from '@/data/products';
 import ProductImage from '@/components/shared/ProductImage';
 import { formatPrice } from '@/lib/utils';
@@ -30,6 +31,7 @@ function maskPhone(phone: string) {
 }
 
 export default function CheckoutForm({ product }: CheckoutFormProps) {
+  const router = useRouter();
   const [form, setForm] = useState({ name: '', phone: '', city: '', country: 'SA' });
   const [status,  setStatus]  = useState<Status>('idle');
   const [error,   setError]   = useState('');
@@ -91,15 +93,24 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
         const data = await res.json();
         throw new Error(data.error || 'حدث خطأ غير متوقع');
       }
-      setStatus('success');
+      // Store order summary for /thankyou page
+      const ref = 'NV-' + Date.now().toString(36).toUpperCase();
+      localStorage.setItem('nuvia_order', JSON.stringify({
+        productName: product.name,
+        price: product.price,
+        currency: product.currency,
+        ref,
+      }));
+
+      // TikTok + Snap pixels (FB fired on /thankyou)
       if (typeof window !== 'undefined') {
-        // @ts-ignore
-        if (window.fbq)    window.fbq('track', 'Purchase', { value: product.price, currency: 'SAR' });
         // @ts-ignore
         if (window.ttq)    window.ttq.track('PlaceAnOrder', { value: product.price, currency: 'SAR' });
         // @ts-ignore
         if (window.snaptr) window.snaptr('track', 'PURCHASE', { price: product.price, currency: 'SAR' });
       }
+
+      router.push('/thankyou');
     } catch (err: any) {
       setStatus('error');
       setError(err.message || 'حدث خطأ. يرجى المحاولة مرة أخرى.');
@@ -254,22 +265,7 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
               </div>
             </div>
 
-            {/* Success state */}
-            {status === 'success' ? (
-              <div className="px-6 py-12 text-center">
-                <div className="text-6xl mb-4">🎉</div>
-                <h3 className="text-2xl font-bold text-nuvia-success mb-2">
-                  تم استلام طلبك بنجاح!
-                </h3>
-                <p className="text-nuvia-text text-base mb-2">
-                  سنتواصل معك قريباً لتأكيد الطلب والشحن
-                </p>
-                <p className="text-nuvia-light text-sm">
-                  رقم الهاتف: <span className="font-semibold">{form.phone}</span>
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="px-6 py-6 space-y-4">
+            <form onSubmit={handleSubmit} className="px-6 py-6 space-y-4">
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-semibold text-secondary mb-1.5" htmlFor="name">
@@ -350,7 +346,6 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
                   ) : 'تأكيد الطلب 📦'}
                 </button>
               </form>
-            )}
 
             {/* Trust badges */}
             <div className="border-t border-accent/40 px-6 py-4 bg-bg-alt">
