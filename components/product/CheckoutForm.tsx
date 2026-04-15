@@ -132,7 +132,7 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
               <h3 className="text-white font-bold text-lg leading-snug">
                 التحقق من رقم الجوال
               </h3>
-              <p className="text-white/65 text-sm mt-1">
+              <p className="text-white/65 text-sm mt-1" dir="ltr">
                 {maskPhone(form.phone)}
               </p>
             </div>
