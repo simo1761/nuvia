@@ -279,9 +279,9 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
                 <label className="block text-sm font-semibold text-secondary mb-1.5" htmlFor="phone">
                   رقم الجوال <span className="text-nuvia-error">*</span>
                 </label>
-                <div className={`flex items-center border rounded-xl overflow-hidden bg-bg transition-all focus-within:ring-2 focus-within:ring-primary/40 ${phoneError ? 'border-nuvia-error' : 'border-accent focus-within:border-primary'}`}>
-                  {/* Dial code badge — right side (RTL start) */}
-                  <div className="flex-shrink-0 px-3 py-3 bg-bg-alt border-l border-accent text-secondary font-semibold text-sm" dir="ltr">
+                <div dir="ltr" className={`flex items-center border rounded-xl overflow-hidden bg-bg transition-all focus-within:ring-2 focus-within:ring-primary/40 ${phoneError ? 'border-nuvia-error' : 'border-accent focus-within:border-primary'}`}>
+                  {/* Dial code badge — left side */}
+                  <div className="flex-shrink-0 px-3 py-3 bg-bg-alt border-r border-accent text-secondary font-semibold text-sm">
                     {currentRule?.dialCode ?? '+966'}
                   </div>
                   <input
@@ -290,9 +290,8 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
                     onChange={handlePhoneChange}
                     onBlur={() => setPhoneTouched(true)}
                     placeholder={currentRule?.placeholder ?? '5xxxxxxxx'}
-                    dir="ltr"
                     inputMode="numeric"
-                    className="flex-1 px-4 py-3 text-nuvia-text placeholder-gray-400 outline-none text-sm bg-transparent text-left"
+                    className="flex-1 px-4 py-3 text-nuvia-text placeholder-gray-400 outline-none text-sm bg-transparent"
                   />
                 </div>
                 {phoneError && (
