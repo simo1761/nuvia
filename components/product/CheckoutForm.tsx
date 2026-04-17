@@ -33,6 +33,7 @@ function maskPhone(phone: string) {
 export default function CheckoutForm({ product }: CheckoutFormProps) {
   const router = useRouter();
   const [form, setForm] = useState({ name: '', phone: '', city: '', country: 'SA' });
+  const [confirmed, setConfirmed] = useState(false);
   const [status,  setStatus]  = useState<Status>('idle');
   const [error,   setError]   = useState('');
   const [otpStep, setOtpStep] = useState<OtpStep>('hidden');
@@ -329,11 +330,33 @@ export default function CheckoutForm({ product }: CheckoutFormProps) {
                   </div>
                 )}
 
+                {/* Confirmation checkbox */}
+                <label className="flex items-start gap-3 cursor-pointer select-none mt-1">
+                  <div className="relative flex-shrink-0 mt-0.5">
+                    <input
+                      type="checkbox"
+                      checked={confirmed}
+                      onChange={e => setConfirmed(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-5 h-5 rounded border-2 border-accent peer-checked:border-primary peer-checked:bg-primary transition-all duration-200 flex items-center justify-center">
+                      {confirmed && (
+                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 12 12">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2 6l3 3 5-5"/>
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-[13px] text-nuvia-text leading-relaxed">
+                    نعم، أنا متأكدة من طلبي ومستعدة لاستلامه ودفع قيمته للمندوب فور وصوله
+                  </span>
+                </label>
+
                 {/* Submit */}
                 <button
                   type="submit"
-                  disabled={status === 'loading'}
-                  className="w-full bg-gradient-to-r from-primary to-primary-dark text-white py-4 rounded-xl font-bold text-lg shadow-gold hover:shadow-gold-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-2 order-btn-pulse"
+                  disabled={status === 'loading' || !confirmed}
+                  className="w-full bg-gradient-to-r from-primary to-primary-dark text-white py-4 rounded-xl font-bold text-lg shadow-gold hover:shadow-gold-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none mt-2 order-btn-pulse"
                 >
                   {status === 'loading' ? (
                     <span className="flex items-center justify-center gap-2">

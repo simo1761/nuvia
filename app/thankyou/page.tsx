@@ -89,8 +89,8 @@ export default function ThankYouPage() {
             </h1>
 
             {/* Message */}
-            <p className="text-nuvia-light text-sm leading-relaxed mb-7">
-              شكراً لثقتك بنوفيا كلينيك. سيتم التواصل معك قريباً لتأكيد الطلب وترتيب الشحن.
+            <p className="text-nuvia-text text-sm leading-relaxed mb-7">
+              عزيزتي، تم استلام طلبكِ بنجاح! 🌸 فريقنا سيقوم بالاتصال بكِ قريباً جداً من أجل تأكيد عنوانكِ وتجهيز شحنتكِ. نرجو منكِ الرد على المكالمة لضمان إرسال الطلب في أسرع وقت.
             </p>
 
             {/* Order summary box */}
