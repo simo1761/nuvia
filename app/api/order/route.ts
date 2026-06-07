@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
 
     const { name, phone, city, country, sku, price, currency } = body;
 
-    // Basic validation
     if (!name || !phone || !city || !country || !sku) {
       console.log('[ORDER] Validation failed — missing fields:', { name: !!name, phone: !!phone, city: !!city, country: !!country, sku: !!sku });
       return NextResponse.json(
@@ -18,7 +17,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Phone: strip spaces and dashes, must be 9–15 digits
     const cleanPhone = phone.replace(/[\s\-]/g, '');
     if (!/^\+?\d{9,15}$/.test(cleanPhone)) {
       console.log('[ORDER] Phone validation failed:', cleanPhone);
@@ -28,18 +26,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // ── 1. Google Sheets (primary, always attempted) ──────────────
     console.log('[ORDER] Calling appendOrderToSheet...');
-    await appendOrderToSheet({
-      name,
-      phone: cleanPhone,
-      city,
-      country,
-      sku,
-      price,
-      currency,
-    });
+    await appendOrderToSheet({ name, phone: cleanPhone, city, country, sku, price, currency });
+    console.log('[ORDER] Google Sheets — row appended');
 
-    console.log('[ORDER] Success — row appended to sheet');
+    // ── 2. Backend DB + CAPI (optional, fire-and-forget) ─────────
+    const backendUrl = process.env.BACKEND_URL;
+    if (backendUrl) {
+      const productName = body.product ?? sku;
+      fetch(`${backendUrl}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: name,
+          phone: cleanPhone,
+          city,
+          productSlug: sku,
+          productName,
+          price: price ?? 0,
+          fbclid: body.fbclid ?? null,
+          fbp: body.fbp ?? null,
+          fbc: body.fbc ?? null,
+          ipAddress: req.headers.get('x-forwarded-for') ?? req.ip ?? null,
+          userAgent: req.headers.get('user-agent') ?? null,
+        }),
+      })
+        .then(r => r.ok
+          ? console.log('[ORDER] Backend DB — order saved')
+          : r.text().then(t => console.warn('[ORDER] Backend returned', r.status, t))
+        )
+        .catch(err => console.warn('[ORDER] Backend unreachable:', (err as Error).message));
+    }
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);

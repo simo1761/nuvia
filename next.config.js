@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone', // required for Docker/Easypanel deployment
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [],

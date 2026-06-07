@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nuvia
+      POSTGRES_USER: nuvia_user
+      POSTGRES_PASSWORD: nuvia_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nuvia_user -d nuvia"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://nuvia_user:nuvia_pass@db:5432/nuvia
+      JWT_SECRET: change_me_in_production
+      JWT_EXPIRES_IN: 7d
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: change_me_in_production
+      META_PIXEL_ID: ""
+      META_ACCESS_TOKEN: ""
+      FRONTEND_URL: http://localhost:3000
+      NODE_ENV: production
+      PORT: 3001
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy && node dist/index.js"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+      GOOGLE_SHEET_ID: ""
+      GOOGLE_SHEETS_CREDENTIALS: ""
+      NEXT_PUBLIC_FB_PIXEL_ID: ""
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
