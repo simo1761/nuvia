@@ -6,7 +6,6 @@ RUN npm install
 
 COPY . .
 
-# Pass public env vars at build time
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_FB_PIXEL_ID
 ARG NEXT_PUBLIC_TIKTOK_PIXEL_ID
@@ -35,6 +34,10 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# sharp is required for image optimization in standalone mode
+COPY --from=builder /app/node_modules/sharp ./node_modules/sharp
+COPY --from=builder /app/node_modules/@img ./node_modules/@img
 
 USER nextjs
 EXPOSE 3000
