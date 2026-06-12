@@ -171,8 +171,8 @@ export const products: Product[] = [
     price: 299, // TODO: update price before launch
     currency: 'SAR',
     images: [
-      '/images/products/pack-rf-placeholder.svg',
-      '/images/products/pack-rf-placeholder.svg',
+      '/images/products/pack_rf.webp',
+      '/images/products/pack_rf.webp',
     ],
     benefits: [
       'تقنية RF الطبية تحفز إنتاج الكولاجين الطبيعي',
