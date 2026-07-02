@@ -5,9 +5,9 @@ import Link from 'next/link';
 import MobileMenu from './MobileMenu';
 
 const navLinks = [
-  { href: '/', label: 'الرئيسية' },
-  { href: '/products', label: 'المنتجات' },
-  { href: '/blog', label: 'المدونة' },
+  { href: '/#how-it-works', label: 'كيف يعمل' },
+  { href: '/#reviews', label: 'التقييمات' },
+  { href: '/#faq', label: 'الأسئلة الشائعة' },
   { href: '/about', label: 'من نحن' },
   { href: '/contact', label: 'تواصل معنا' },
 ];
@@ -33,7 +33,7 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo (right in RTL) */}
+            {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
                 <span className="text-white font-bold text-sm">N</span>
@@ -46,24 +46,24 @@ export default function Header() {
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-6">
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.href}
                   href={link.href}
                   className="text-nuvia-text hover:text-primary transition-colors font-medium text-sm"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
             </nav>
 
             {/* CTA + Hamburger */}
             <div className="flex items-center gap-3">
-              <Link
-                href="/products"
+              <a
+                href="/#order"
                 className="hidden sm:inline-flex items-center bg-gradient-to-r from-primary to-primary-dark text-white px-5 py-2 rounded-full text-sm font-bold shadow-gold hover:shadow-gold-lg transition-all"
               >
                 اطلبي الآن
-              </Link>
+              </a>
               <button
                 onClick={() => setMenuOpen(true)}
                 className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-accent transition-colors"

@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // required for Docker/Easypanel deployment
+  output: 'standalone',
+  async redirects() {
+    return [
+      { source: '/product/pack-rf', destination: '/', permanent: true },
+      { source: '/products', destination: '/', permanent: true },
+    ];
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [],
