@@ -9,6 +9,7 @@ interface OrderSummary {
   price: number;
   currency: string;
   ref: string;
+  capiEventId?: string;
 }
 
 export default function ThankYouPage() {
@@ -29,7 +30,22 @@ export default function ThankYouPage() {
       requestAnimationFrame(() => setAnimating(true));
       if (typeof window !== 'undefined') {
         // @ts-ignore
-        if (window.fbq) window.fbq('track', 'Purchase', { value: data.price, currency: data.currency });
+        const fbq = window.fbq as ((...a: unknown[]) => void) | undefined;
+        if (fbq) {
+          fbq(
+            'track',
+            'Purchase',
+            {
+              value:        data.price,
+              currency:     data.currency,
+              content_ids:  ['NV-RF-005'],
+              content_type: 'product',
+              order_id:     data.ref,
+            },
+            // Same event_id as CAPI → Meta deduplicates the two signals
+            data.capiEventId ? { eventID: data.capiEventId } : undefined,
+          );
+        }
       }
     } catch {
       router.replace('/');

@@ -61,6 +61,12 @@ export default function LPOrderForm() {
     phoneConfirmed &&
     status !== 'loading';
 
+  function readCookie(name: string): string {
+    if (typeof document === 'undefined') return '';
+    const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
@@ -68,6 +74,25 @@ export default function LPOrderForm() {
     setErrorMsg('');
 
     const fullPhone = `${rule?.dialCode ?? ''}${phoneStripped.replace(/\D/g, '')}`;
+
+    // Generate a unique event ID for Meta CAPI ↔ browser pixel deduplication
+    const capiEventId = `ev-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    const fbp = readCookie('_fbp');
+    const fbc = readCookie('_fbc');
+
+    // Browser pixel — InitiateCheckout
+    try {
+      const fbq = (window as unknown as Record<string, unknown>).fbq as ((...a: unknown[]) => void) | undefined;
+      if (fbq) {
+        fbq('track', 'InitiateCheckout', {
+          content_ids:  ['NV-RF-005'],
+          content_type: 'product',
+          value:        PACK_PRICE,
+          currency:     'SAR',
+          num_items:    1,
+        }, { eventID: capiEventId });
+      }
+    } catch { /* non-bloquant */ }
 
     try {
       const res = await fetch('/api/order', {
@@ -83,6 +108,9 @@ export default function LPOrderForm() {
           price: PACK_PRICE,
           currency: 'SAR',
           quantity: 1,
+          capiEventId,
+          fbp,
+          fbc,
         }),
       });
 
@@ -93,10 +121,10 @@ export default function LPOrderForm() {
         return;
       }
 
-      const ref = `NV-${Date.now().toString(36).toUpperCase()}`;
+      const ref = (data as { orderId?: string }).orderId ?? `NV-${Date.now().toString(36).toUpperCase()}`;
       localStorage.setItem(
         'nuvia_order',
-        JSON.stringify({ productName: PRODUCT_LABEL, price: PACK_PRICE, currency: 'SAR', ref })
+        JSON.stringify({ productName: PRODUCT_LABEL, price: PACK_PRICE, currency: 'SAR', ref, capiEventId })
       );
       router.push('/thankyou');
     } catch {

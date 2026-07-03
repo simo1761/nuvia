@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
+import { sendPurchaseCapi } from '@/lib/meta-capi';
 
 export const runtime = 'nodejs';
 
@@ -118,10 +119,16 @@ async function sendToCod(order: Order): Promise<string | null> {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json() as Record<string, unknown>;
-    const { name, phone, city, country, sku, product, price, currency } = body as {
+    const { name, phone, city, country, sku, product, price, currency, capiEventId, fbp, fbc } = body as {
       name?: string; phone?: string; city?: string; country?: string;
       sku?: string; product?: string; price?: number; currency?: string;
+      capiEventId?: string; fbp?: string; fbc?: string;
     };
+
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      ?? req.headers.get('x-real-ip')
+      ?? '';
+    const clientUa = req.headers.get('user-agent') ?? '';
 
     if (!name || !phone || !city || !country || !sku) {
       return NextResponse.json({ error: 'يرجى ملء جميع الحقول المطلوبة' }, { status: 400 });
@@ -151,6 +158,30 @@ export async function POST(req: NextRequest) {
     orders.push(order);
     saveOrders(orders);
     console.log('[ORDER] Saved to', ORDERS_FILE, '—', order.id, name, cleanPhone, city);
+
+    // Fire-and-forget — CAPI Purchase (server-side Meta signal, highest quality)
+    if (capiEventId) {
+      const firstName = name.split(/\s+/)[0] ?? name;
+      sendPurchaseCapi({
+        eventId: capiEventId,
+        user: {
+          phone:       cleanPhone,
+          firstName,
+          city,
+          countryCode: country,
+          clientIp,
+          clientUa,
+          fbp:         fbp ?? '',
+          fbc:         fbc ?? '',
+        },
+        custom: {
+          value:      order.price,
+          currency:   order.currency,
+          contentIds: [order.sku],
+          orderId:    order.id,
+        },
+      }).catch(err => console.error('[CAPI] Purchase error:', err));
+    }
 
     // Fire-and-forget to COD Network (never blocks the customer response)
     sendToCod(order)

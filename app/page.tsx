@@ -7,6 +7,7 @@ const LPReviewsCarousel = dynamic(() => import('@/components/landing/LPReviewsCa
 const LPOrderForm       = dynamic(() => import('@/components/landing/LPOrderForm'));
 const LPFAQAccordion    = dynamic(() => import('@/components/landing/LPFAQAccordion'));
 const LPStickyCTA       = dynamic(() => import('@/components/landing/LPStickyCTA'), { ssr: false });
+const MetaViewContent   = dynamic(() => import('@/components/tracking/MetaViewContent'), { ssr: false });
 
 export const metadata: Metadata = {
   title: 'باقة RF لشد الجلد وعلاج السيلوليت — نوفيا كلينيك',
@@ -27,7 +28,8 @@ function Stars({ count = 5 }: { count?: number }) {
 }
 
 export default function HomePage() {
-  return (
+  return (<>
+    <MetaViewContent />
     <div className="font-tajawal" dir="rtl">
 
       {/* ══════════════════════════════════════════════════════════ */}
@@ -644,5 +646,5 @@ export default function HomePage() {
 
       <LPStickyCTA />
     </div>
-  );
+  </>);
 }
