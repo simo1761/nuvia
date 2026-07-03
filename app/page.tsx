@@ -35,34 +35,32 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════ */}
       <section className="relative bg-secondary overflow-hidden">
 
-        {/* ── MOBILE: cropped pack image (landscape → portrait crop) + gradient into dark page ── */}
-        <div className="relative lg:hidden w-full aspect-[4/5]">
-          <Image
-            src="/images/lp/hero-pack-mobile.webp"
-            alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
-            fill
-            className="object-cover object-center"
-            priority
-            sizes="100vw"
-          />
-          {/*
-            Gradient logic:
-            - Top 36%: transparent — pack & products clearly visible
-            - 36–58%: smooth fade — marble surface blends away
-            - 58–100%: #1A1A2E — matches page bg exactly (seamless join) + text readable
-          */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: 'linear-gradient(to top, #1A1A2E 0%, #1A1A2E 28%, rgba(26,26,46,0.88) 42%, rgba(26,26,46,0.35) 58%, rgba(26,26,46,0.0) 72%)' }}
-          />
+        {/* ── MOBILE: landscape image (3:2 ratio = no zoom, all products visible) + text below ── */}
+        <div className="lg:hidden">
 
-          {/* Compact text — everything visible without scrolling */}
-          <div className="absolute bottom-0 inset-x-0 z-10 px-4 pb-4">
+          {/* Image at native landscape ratio — object-cover fills perfectly, zero cropping vertically */}
+          <div className="relative w-full aspect-[3/2]">
+            <Image
+              src="/images/lp/hero-pack-mobile.webp"
+              alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="100vw"
+            />
+            {/* Gradient: only touches bottom ~38% to bridge into dark text section below */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'linear-gradient(to top, #1A1A2E 0%, rgba(26,26,46,0.72) 18%, rgba(26,26,46,0.0) 40%)' }}
+            />
+          </div>
+
+          {/* Text + CTA — bg-secondary inherited from section, seamless join with gradient */}
+          <div className="px-4 pt-3 pb-5">
             <h1 className="text-2xl font-bold text-white leading-snug mb-2">
               باقة RF لشد الجلد<br />
               <span className="text-primary">ومحاربة السيلوليت</span>
             </h1>
-            {/* Price + stars on one line — saves vertical space */}
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-baseline gap-2">
                 <span className="text-white/40 text-xs line-through">٤٩٩</span>
