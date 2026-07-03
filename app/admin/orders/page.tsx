@@ -1,11 +1,15 @@
 import { notFound } from 'next/navigation';
-import fs from 'fs';
-import path from 'path';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import type { Order } from '@/app/api/order/route';
 
 export const dynamic = 'force-dynamic';
 
-const ORDERS_FILE = process.env.ORDERS_FILE ?? path.join(process.cwd(), 'orders.json');
+const ORDERS_FILE =
+  process.env.ORDERS_FILE ??
+  (process.platform === 'win32'
+    ? join(process.cwd(), 'orders.json')
+    : '/tmp/nuvia-orders.json');
 const ADMIN_KEY   = process.env.ADMIN_KEY ?? 'nuvia2025';
 
 const COUNTRY_LABELS: Record<string, string> = {
@@ -51,8 +55,8 @@ export default function AdminOrdersPage({ searchParams }: Props) {
 
   let orders: Order[] = [];
   try {
-    if (fs.existsSync(ORDERS_FILE)) {
-      orders = JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8')) as Order[];
+    if (existsSync(ORDERS_FILE)) {
+      orders = JSON.parse(readFileSync(ORDERS_FILE, 'utf8')) as Order[];
     }
   } catch { orders = []; }
 
