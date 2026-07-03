@@ -21,12 +21,8 @@ const COUNTRIES = [
   { code: 'QA', name: 'قطر', flag: '🇶🇦' },
 ];
 
-const OFFERS = [
-  { qty: 1, label: 'جهاز RF + كريم الشد', price: 299, badge: '' },
-  { qty: 2, label: 'جهازَين RF + ٢ كريم', price: 499, badge: 'وفري ٩٩ ريال', original: 598 },
-];
-
-const GEL_PRICE = 39;
+const PACK_PRICE = 239;
+const PRODUCT_LABEL = 'باقة RF — جهاز + جل التوصيل';
 
 function validatePhone(phone: string, country: string): boolean {
   const rule = PHONE_RULES[country];
@@ -46,21 +42,22 @@ function CheckIcon() {
 
 export default function LPOrderForm() {
   const router = useRouter();
-  const [offer, setOffer] = useState(0);
-  const [withGel, setWithGel] = useState(false);
   const [country, setCountry] = useState('SA');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
+  const [phoneConfirmed, setPhoneConfirmed] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const selectedOffer = OFFERS[offer];
-  const totalPrice = selectedOffer.price + (withGel ? GEL_PRICE : 0);
   const phoneValid = phone.length > 0 && validatePhone(phone, country);
-  const canSubmit =
-    name.trim().length >= 2 && phoneValid && city.trim().length >= 2 && status !== 'loading';
   const rule = PHONE_RULES[country];
+  const canSubmit =
+    name.trim().length >= 2 &&
+    phoneValid &&
+    city.trim().length >= 2 &&
+    phoneConfirmed &&
+    status !== 'loading';
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -69,7 +66,6 @@ export default function LPOrderForm() {
     setErrorMsg('');
 
     const fullPhone = `${rule?.dialCode ?? ''}${phone.replace(/\D/g, '')}`;
-    const productLabel = `${selectedOffer.label}${withGel ? ' + جل التوصيل' : ''}`;
 
     try {
       const res = await fetch('/api/order', {
@@ -81,10 +77,10 @@ export default function LPOrderForm() {
           city: city.trim(),
           country,
           sku: 'NV-RF-005',
-          product: productLabel,
-          price: totalPrice,
+          product: PRODUCT_LABEL,
+          price: PACK_PRICE,
           currency: 'SAR',
-          quantity: selectedOffer.qty,
+          quantity: 1,
         }),
       });
 
@@ -98,7 +94,7 @@ export default function LPOrderForm() {
       const ref = `NV-${Date.now().toString(36).toUpperCase()}`;
       localStorage.setItem(
         'nuvia_order',
-        JSON.stringify({ productName: productLabel, price: totalPrice, currency: 'SAR', ref })
+        JSON.stringify({ productName: PRODUCT_LABEL, price: PACK_PRICE, currency: 'SAR', ref })
       );
       router.push('/thankyou');
     } catch {
@@ -110,72 +106,37 @@ export default function LPOrderForm() {
   return (
     <section id="order" className="py-14 bg-gradient-to-b from-bg-alt to-bg font-tajawal">
       <div className="max-w-lg mx-auto px-4">
+
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <span className="inline-block bg-accent text-primary-dark text-xs font-bold px-3 py-1.5 rounded-full mb-3">
             اطلبي الآن — الدفع عند الاستلام 💵
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold text-secondary">
             احجزي باقة RF الخاصة بكِ
           </h2>
-          <p className="text-nuvia-light text-sm mt-2">
-            شحن مجاني · دفع عند الاستلام · ضمان 30 يوم
-          </p>
+          <p className="text-nuvia-light text-sm mt-2">شحن مجاني · دفع عند الاستلام · ضمان 30 يوم</p>
         </div>
 
-        {/* Offer Selector */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          {OFFERS.map((o, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setOffer(i)}
-              className={`relative rounded-2xl border-2 p-4 text-right transition-all ${
-                offer === i
-                  ? 'border-primary bg-accent/50 shadow-gold'
-                  : 'border-accent bg-white hover:border-primary/40'
-              }`}
-            >
-              {o.badge && (
-                <span className="absolute -top-2.5 right-3 bg-nuvia-success text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  {o.badge}
-                </span>
-              )}
-              <p className="text-xs text-nuvia-light mb-1 leading-tight">{o.label}</p>
-              <p className="text-xl font-bold text-secondary">
-                {o.price} <span className="text-sm font-normal">ر.س</span>
-              </p>
-              {o.original && (
-                <p className="text-xs text-nuvia-light line-through">{o.original} ر.س</p>
-              )}
-              {offer === i && (
-                <span className="absolute top-2 left-3 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                  <CheckIcon />
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Order Bump */}
-        <div
-          onClick={() => setWithGel(!withGel)}
-          className={`cursor-pointer rounded-2xl border-2 p-4 mb-6 flex items-center gap-4 transition-all ${
-            withGel ? 'border-primary bg-accent/50' : 'border-accent bg-white hover:border-primary/30'
-          }`}
-        >
-          <div
-            className={`w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all ${
-              withGel ? 'border-primary bg-primary' : 'border-accent'
-            }`}
-          >
-            {withGel && <CheckIcon />}
+        {/* Pack summary */}
+        <div className="bg-white rounded-2xl border-2 border-primary shadow-gold p-5 mb-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-bold text-secondary text-base">باقة RF الكاملة</p>
+              <p className="text-nuvia-light text-xs mt-0.5">جهاز RF + جل التوصيل الاحترافي</p>
+              <div className="flex items-baseline gap-2 mt-2">
+                <span className="text-nuvia-light text-xs line-through">٤٩٩ ريال</span>
+                <span className="text-primary font-bold text-2xl">٢٣٩ <span className="text-sm font-normal">ريال</span></span>
+              </div>
+            </div>
+            <div className="text-left flex-shrink-0">
+              <span className="inline-block bg-nuvia-success text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                وفري ٢٦٠ ريال
+              </span>
+              <p className="text-nuvia-light text-[11px] mt-2">🚚 شحن مجاني</p>
+              <p className="text-nuvia-light text-[11px]">💵 دفع عند الاستلام</p>
+            </div>
           </div>
-          <div className="flex-1 text-right">
-            <p className="font-semibold text-secondary text-sm">أضيفي جل التوصيل الاحترافي</p>
-            <p className="text-xs text-nuvia-light mt-0.5">يضاعف فاعلية الجهاز ويحمي البشرة أثناء الجلسة</p>
-          </div>
-          <p className="font-bold text-primary text-sm flex-shrink-0">+{GEL_PRICE} ر.س</p>
         </div>
 
         {/* Form */}
@@ -253,11 +214,32 @@ export default function LPOrderForm() {
             />
           </div>
 
+          {/* Phone confirmation checkbox */}
+          <div
+            onClick={() => setPhoneConfirmed(!phoneConfirmed)}
+            className={`cursor-pointer rounded-2xl border-2 p-4 flex items-start gap-3 transition-all ${
+              phoneConfirmed
+                ? 'border-nuvia-success bg-nuvia-success/5'
+                : 'border-accent bg-bg-alt hover:border-primary/40'
+            }`}
+          >
+            <div
+              className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
+                phoneConfirmed ? 'border-nuvia-success bg-nuvia-success' : 'border-gray-300 bg-white'
+              }`}
+            >
+              {phoneConfirmed && <CheckIcon />}
+            </div>
+            <p className="text-nuvia-text text-xs leading-relaxed">
+              ✓ تأكدت من صحة رقم هاتفي وأوافق على الرد عند اتصال فريق نوفيا لتأكيد طلبي وتجهيز الشحنة
+            </p>
+          </div>
+
           {/* Order Total */}
           <div className="bg-bg-alt rounded-xl px-4 py-3 flex items-center justify-between">
             <div className="text-right">
               <p className="text-xs text-nuvia-light">المجموع الكلي</p>
-              <p className="font-bold text-secondary text-xl">{totalPrice} <span className="text-sm font-normal">ريال</span></p>
+              <p className="font-bold text-secondary text-xl">{PACK_PRICE} <span className="text-sm font-normal">ريال</span></p>
             </div>
             <div className="text-right text-xs text-nuvia-light space-y-0.5">
               <p>🚚 شحن مجاني</p>
@@ -291,9 +273,15 @@ export default function LPOrderForm() {
                 جاري إرسال الطلب...
               </span>
             ) : (
-              `اطلبي الآن — ${totalPrice} ريال 🛒`
+              `اطلبي الآن — ${PACK_PRICE} ريال 🛒`
             )}
           </button>
+
+          {!phoneConfirmed && name.trim().length >= 2 && phoneValid && city.trim().length >= 2 && (
+            <p className="text-amber-600 text-xs text-center">
+              ⚠️ يرجى تأكيد رقم الهاتف أعلاه للمتابعة
+            </p>
+          )}
 
           <p className="text-center text-nuvia-light text-xs">
             💵 الدفع عند الاستلام · 🚚 شحن مجاني · 🔒 بياناتكِ آمنة

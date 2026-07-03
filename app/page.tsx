@@ -33,73 +33,138 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════ */}
       {/* 1. HERO                                                    */}
       {/* ══════════════════════════════════════════════════════════ */}
-      <section className="bg-gradient-to-b from-bg-alt to-bg py-10 sm:py-16 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <section className="relative bg-secondary overflow-hidden">
 
-            {/* Product Image */}
-            <div className="flex justify-center lg:order-2">
-              <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px]">
-                <Image
-                  src="/images/lp/hero-pack.webp"
-                  alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
-                  fill
-                  className="object-contain drop-shadow-2xl"
-                  priority
-                  sizes="(max-width: 640px) 256px, (max-width: 1024px) 320px, 420px"
-                />
-              </div>
+        {/* ── MOBILE: full-width image with text overlay ── */}
+        <div className="relative lg:hidden w-full aspect-[3/4] sm:aspect-[2/3]">
+          <Image
+            src="/images/lp/hero-pack.webp"
+            alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
+            fill
+            className="object-contain object-center"
+            priority
+            sizes="100vw"
+          />
+          {/* Gradient overlay — readable text at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/60 to-secondary/10 pointer-events-none" />
+
+          {/* Badge */}
+          <div className="absolute top-4 right-4 z-10">
+            <span className="inline-flex items-center gap-1 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-gold">
+              🌟 تقنية طبية في بيتكِ
+            </span>
+          </div>
+
+          {/* Text overlay at bottom */}
+          <div className="absolute bottom-0 inset-x-0 z-10 px-5 pb-6">
+            <h1 className="text-[26px] font-bold text-white leading-tight mb-2">
+              باقة RF لشد الجلد<br />
+              <span className="text-primary">ومحاربة السيلوليت</span>
+            </h1>
+            <p className="text-white/70 text-sm mb-3 leading-relaxed">
+              تقنية طبية تصل لعمق الجلد — في بيتكِ، بخصوصية تامة
+            </p>
+            <div className="flex items-center gap-2 mb-3">
+              <Stars />
+              <span className="text-white/80 text-sm font-semibold">٤.٨/٥</span>
+              <span className="text-white/50 text-xs">(+١٢٤ تقييم)</span>
             </div>
+            <div className="flex items-baseline gap-3 mb-4">
+              <span className="text-white/40 text-sm line-through">٤٩٩ ريال</span>
+              <span className="text-primary font-bold text-3xl">٢٣٩ <span className="text-lg font-normal text-white/80">ريال</span></span>
+            </div>
+            <a
+              href="#order"
+              className="inline-flex items-center justify-center w-full bg-gradient-to-r from-primary to-primary-dark text-white py-4 rounded-full font-bold text-lg shadow-gold hover:shadow-gold-lg hover:-translate-y-0.5 transition-all order-btn-pulse"
+            >
+              اطلبي الآن — الدفع عند الاستلام
+            </a>
+            <p className="text-white/35 text-xs mt-2 text-center">
+              💵 دفع عند الاستلام · 🚚 شحن مجاني · ✓ ضمان 30 يوم
+            </p>
+          </div>
+        </div>
+
+        {/* Trust bar mobile */}
+        <div className="lg:hidden bg-white/5 border-t border-white/10 px-4 py-3">
+          <div className="flex justify-around text-center max-w-xs mx-auto">
+            {[
+              { icon: '💵', label: 'دفع عند الاستلام' },
+              { icon: '🚚', label: 'شحن مجاني' },
+              { icon: '🔄', label: 'ضمان 30 يوم' },
+            ].map((t) => (
+              <div key={t.label}>
+                <div className="text-base">{t.icon}</div>
+                <p className="text-white/55 text-[10px] mt-0.5">{t.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── DESKTOP: two-column ── */}
+        <div className="hidden lg:block py-16 px-8 relative">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+          <div className="relative max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
 
             {/* Copy */}
-            <div className="lg:order-1 text-center lg:text-right">
-              <span className="inline-block bg-accent text-primary-dark text-xs font-bold px-3 py-1.5 rounded-full mb-4">
-                جديد 🌟 تقنية طبية في راحة بيتكِ
+            <div className="text-right">
+              <span className="inline-flex items-center gap-1 bg-primary/20 text-primary text-xs font-bold px-3 py-1.5 rounded-full mb-5">
+                🌟 تقنية طبية في راحة بيتكِ
               </span>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-secondary leading-tight mb-4">
+              <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-4">
                 باقة RF لشد الجلد<br />
                 <span className="text-primary">ومحاربة السيلوليت</span>
               </h1>
-              <p className="text-nuvia-text text-base sm:text-lg mb-5 leading-relaxed">
-                ليس تقنية عيادات التجميل… بل في بيتكِ، في بيتكِ
+              <p className="text-white/65 text-lg mb-6 leading-relaxed">
+                تقنية طبية تصل لعمق الجلد — في بيتكِ، بخصوصية تامة
               </p>
-
-              <ul className="text-right mb-5 space-y-2">
+              <ul className="space-y-2 mb-6">
                 {[
-                  'تقنية RF تحفيز الكولاجين وتشد الجلد المترهل',
+                  'RF يحفز الكولاجين ويشد الجلد المترهل',
                   'موجات فوق صوتية تستهدف الدهون العنيدة',
-                  'تحفيز عضلي EMS يشد ويحسن المظهر العام',
-                  'الجل الناقل — تقنية متكاملة، لا كريم يمشي فقط',
+                  'EMS يشد ويقوي العضلات تحت الجلد',
+                  'جل التوصيل مُدرج في الباقة',
                 ].map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm text-nuvia-text">
-                    <span className="text-nuvia-success flex-shrink-0 mt-0.5">✓</span>
+                  <li key={b} className="flex items-start gap-2 text-sm text-white/75">
+                    <span className="text-primary flex-shrink-0 mt-0.5">✓</span>
                     <span>{b}</span>
                   </li>
                 ))}
               </ul>
-
-              <div className="flex items-center gap-3 justify-center lg:justify-start mb-5">
+              <div className="flex items-center gap-3 mb-4">
                 <Stars />
-                <span className="text-nuvia-text text-sm font-semibold">٤.٨/٥</span>
-                <span className="text-nuvia-light text-sm">(+١٢٤ تقييم)</span>
+                <span className="text-white/80 font-semibold">٤.٨/٥</span>
+                <span className="text-white/45 text-sm">(+١٢٤ تقييم)</span>
               </div>
-
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-6">
-                <span className="text-nuvia-light text-sm line-through">٤٩٩ ريال</span>
-                <span className="font-bold text-primary text-xl">٢٩٩ ريال فقط</span>
+              <div className="flex items-baseline gap-3 mb-6">
+                <span className="text-white/40 text-base line-through">٤٩٩ ريال</span>
+                <span className="text-primary font-bold text-4xl">٢٣٩ <span className="text-xl font-normal text-white/70">ريال</span></span>
               </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
-                  href="#order"
-                  className="inline-flex items-center justify-center bg-gradient-to-r from-primary to-primary-dark text-white px-8 py-4 rounded-full font-bold text-lg shadow-gold hover:shadow-gold-lg hover:-translate-y-0.5 transition-all order-btn-pulse"
-                >
-                  اطلبي الآن — الدفع عند الاستلام
-                </a>
-              </div>
-              <p className="text-nuvia-light text-xs mt-3">
-                💵 دفع عند الاستلام &nbsp;·&nbsp; 🚚 شحن مجاني &nbsp;·&nbsp; ✓ ضمان 30 يوم
+              <a
+                href="#order"
+                className="inline-flex items-center justify-center bg-gradient-to-r from-primary to-primary-dark text-white px-10 py-4 rounded-full font-bold text-lg shadow-gold hover:shadow-gold-lg hover:-translate-y-0.5 transition-all order-btn-pulse"
+              >
+                اطلبي الآن — الدفع عند الاستلام
+              </a>
+              <p className="text-white/35 text-xs mt-3">
+                💵 دفع عند الاستلام · 🚚 شحن مجاني · ✓ ضمان 30 يوم
               </p>
+            </div>
+
+            {/* Product image */}
+            <div className="relative">
+              <div className="absolute -inset-10 bg-primary/10 rounded-full blur-3xl" />
+              <div className="relative w-full aspect-square max-w-lg mx-auto">
+                <Image
+                  src="/images/lp/hero-pack.webp"
+                  alt="باقة RF — نوفيا كلينيك"
+                  fill
+                  className="object-contain drop-shadow-2xl"
+                  priority
+                  sizes="(max-width: 1280px) 50vw, 640px"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -445,7 +510,7 @@ export default function HomePage() {
             شو موجود في الباقة؟
           </h2>
           <p className="text-center text-nuvia-light text-sm mb-8">
-            القيمة الكاملة ٤٩٩ ريال — اليوم بس ٢٩٩ ريال
+            القيمة الكاملة ٤٩٩ ريال — اليوم بس ٢٣٩ ريال
           </p>
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-accent/60">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -570,7 +635,7 @@ export default function HomePage() {
           <span className="text-4xl block mb-4">✨</span>
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">جاهزة تبدأين؟</h2>
           <p className="text-white/75 text-sm leading-relaxed mb-3">
-            باقة كاملة بتقنية العيادات · ٢٩٩ ريال · دفع عند الاستلام · ضمان 30 يوم
+            باقة كاملة بتقنية العيادات · ٢٣٩ ريال · دفع عند الاستلام · ضمان 30 يوم
           </p>
           <p className="text-white/60 text-xs mb-8">انضمي لأكثر من ١٠,٠٠٠ عميلة سعيدة في دول الخليج</p>
           <a

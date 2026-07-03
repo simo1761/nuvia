@@ -1,45 +1,60 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+
+const INSTA_RING = 'linear-gradient(135deg, #feda75 0%, #fa7e1e 30%, #d62976 65%, #4f5bd5 100%)';
 
 const stories = [
   {
     src: '/videos/stories/rev1.mp4',
-    label: 'التجربة الأولى',
-    ring: 'linear-gradient(135deg,#F472B6,#E11D48)',
-    bg: 'linear-gradient(135deg,#FFEEF5,#FFB3CE)',
+    name: 'نور الشمري',
+    avatar: '/images/reviews/review1.webp',
   },
   {
     src: '/videos/stories/rev2.mp4',
-    label: 'الأسبوع الأول',
-    ring: 'linear-gradient(135deg,#FB923C,#D97706)',
-    bg: 'linear-gradient(135deg,#FFF3E6,#FFE0B2)',
+    name: 'سارة العتيبي',
+    avatar: '/images/reviews/review2.webp',
   },
   {
     src: '/videos/stories/rev3.mp4',
-    label: 'الأسبوع الثاني',
-    ring: 'linear-gradient(135deg,#FBBF24,#D97706)',
-    bg: 'linear-gradient(135deg,#FFFDE7,#FFF3C4)',
+    name: 'هنوف القحطاني',
+    avatar: '/images/reviews/review3.webp',
   },
   {
     src: '/videos/stories/rev4.mp4',
-    label: 'الأسبوع الثالث',
-    ring: 'linear-gradient(135deg,#34D399,#059669)',
-    bg: 'linear-gradient(135deg,#EEFBF3,#BBFCE8)',
+    name: 'منى الزهراني',
+    avatar: '/images/reviews/review4.webp',
   },
   {
     src: '/videos/stories/rev5.mp4',
-    label: 'النتيجة ✨',
-    ring: 'linear-gradient(135deg,#D4A017,#A97830)',
-    bg: 'linear-gradient(135deg,#FFF8EB,#FAECD8)',
+    name: 'رنا الحربي',
+    avatar: '/images/reviews/review5.webp',
   },
 ];
 
 export default function LPStoryStrip() {
   const [active, setActive] = useState<number | null>(null);
   const [progress, setProgress] = useState(0);
+  const [thumbnailsReady, setThumbnailsReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const touchStartY = useRef(0);
+  const stripRef = useRef<HTMLDivElement>(null);
+
+  // Lazy-load video thumbnails only when strip scrolls into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setThumbnailsReady(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (stripRef.current) observer.observe(stripRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const openStory = (idx: number) => {
     setProgress(0);
@@ -92,54 +107,74 @@ export default function LPStoryStrip() {
   }, [active]);
 
   useEffect(() => {
-    if (active !== null) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = active !== null ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [active]);
 
   return (
     <>
-      {/* ── Strip ── */}
-      <section className="py-8 bg-white">
-        <div className="max-w-lg mx-auto px-4">
-          <p className="text-center text-xs text-nuvia-light mb-5 font-tajawal font-medium">
-            شاهدي التجربة بنفسك 👁
-          </p>
+      {/* ── Instagram-style story strip ── */}
+      <section className="py-6 bg-white border-b border-accent/30" ref={stripRef}>
+        <div className="max-w-lg mx-auto px-2">
           <div
-            className="flex gap-5 justify-center overflow-x-auto pb-2"
+            className="flex gap-4 overflow-x-auto py-2 px-3"
             style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
           >
             {stories.map((s, i) => (
               <button
                 key={i}
                 onClick={() => openStory(i)}
-                className="flex flex-col items-center gap-2 flex-shrink-0"
-                aria-label={`مشاهدة ${s.label}`}
+                className="flex flex-col items-center gap-0 flex-shrink-0 focus:outline-none"
+                aria-label={`مشاهدة قصة ${s.name}`}
               >
-                {/* CSS-only story ring — zero network requests */}
+                {/* Story ring + video thumbnail — exactly like Instagram */}
                 <div
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[3px] flex-shrink-0"
-                  style={{ background: s.ring }}
+                  className="relative w-[72px] h-[72px] sm:w-20 sm:h-20 rounded-full p-[3px] flex-shrink-0"
+                  style={{ background: INSTA_RING }}
                 >
-                  <div
-                    className="w-full h-full rounded-full flex items-center justify-center"
-                    style={{ background: s.bg }}
-                  >
-                    <svg
-                      className="w-6 h-6 sm:w-7 sm:h-7 drop-shadow"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      style={{ color: '#5c3d1e', opacity: 0.7 }}
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                  {/* Inner white gap (Instagram look) */}
+                  <div className="w-full h-full rounded-full p-[2px] bg-white">
+                    {/* Video thumbnail or placeholder */}
+                    <div className="w-full h-full rounded-full overflow-hidden bg-gray-100 relative">
+                      {thumbnailsReady ? (
+                        <video
+                          src={`${s.src}#t=0.5`}
+                          muted
+                          playsInline
+                          preload="metadata"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" />
+                      )}
+                      {/* Play icon overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/15">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
+                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white translate-x-[1px]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <span className="text-xs text-nuvia-text font-tajawal font-semibold whitespace-nowrap">
-                  {s.label}
+
+                {/* Profile avatar — overlapping the bottom of the story ring (Instagram style) */}
+                <div className="relative -mt-4 z-10 mb-1.5">
+                  <div className="w-7 h-7 rounded-full overflow-hidden border-[2.5px] border-white shadow-sm">
+                    <Image
+                      src={s.avatar}
+                      alt={s.name}
+                      width={28}
+                      height={28}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Arabic name */}
+                <span className="text-[11px] text-secondary font-tajawal font-semibold text-center leading-tight max-w-[72px] sm:max-w-[80px] line-clamp-1">
+                  {s.name}
                 </span>
               </button>
             ))}
@@ -147,7 +182,7 @@ export default function LPStoryStrip() {
         </div>
       </section>
 
-      {/* ── Fullscreen Story Player — video loads ONLY when user clicks ── */}
+      {/* ── Fullscreen Story Player ── */}
       {active !== null && (
         <div
           className="fixed inset-0 z-[70] bg-black flex flex-col select-none"
@@ -172,20 +207,31 @@ export default function LPStoryStrip() {
             ))}
           </div>
 
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 pb-2 z-10 flex-shrink-0">
+          {/* Header with profile */}
+          <div className="flex items-center justify-between px-4 pb-3 z-10 flex-shrink-0">
             <button onClick={closeStory} className="text-white p-1" aria-label="إغلاق">
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <span className="text-white text-sm font-tajawal font-medium drop-shadow">
-              {stories[active].label}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-white text-sm font-tajawal font-semibold drop-shadow">
+                {stories[active].name}
+              </span>
+              <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/60">
+                <Image
+                  src={stories[active].avatar}
+                  alt={stories[active].name}
+                  width={32}
+                  height={32}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </div>
             <div className="w-9" />
           </div>
 
-          {/* Video — created here for the first time, loaded on demand */}
+          {/* Video */}
           <div className="flex-1 relative overflow-hidden">
             <video
               ref={videoRef}
@@ -195,8 +241,7 @@ export default function LPStoryStrip() {
               preload="auto"
               className="absolute inset-0 w-full h-full object-contain"
             />
-
-            {/* Tap zones: left 1/3 = prev, right 2/3 = next */}
+            {/* Tap zones */}
             <div className="absolute inset-0 flex z-10">
               <div className="w-1/3 h-full cursor-pointer" onClick={goPrev} />
               <div className="w-2/3 h-full cursor-pointer" onClick={goNext} />
