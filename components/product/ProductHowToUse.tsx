@@ -18,7 +18,7 @@ const steps = [
     step: 3,
     image: '/images/how-to-use/howto-3.webp',
     title: 'ادلّكي بالجهاز',
-    desc: 'شغّلي جهاز التدليك وحرّكيه بحركات دائرية على المنطقة لمدة ٥ إلى ١٠ دقائق. كرّري العملية يومياً للحصول على نتائج مرئية خلال ٣٠ يوماً.',
+    desc: 'شغّلي جهاز التدليك وحرّكيه بحركات دائرية على المنطقة لمدة 5 إلى 10 دقائق. كرّري العملية يومياً للحصول على نتائج مرئية خلال 30 يوماً.',
   },
 ];
 
@@ -28,7 +28,7 @@ export default function ProductHowToUse() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           title="طريقة الاستخدام"
-          subtitle="٣ خطوات بسيطة — نتائج مرئية خلال ٣٠ يوماً"
+          subtitle="3 خطوات بسيطة — نتائج مرئية خلال 30 يوماً"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-2">

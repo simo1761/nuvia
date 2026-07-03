@@ -60,7 +60,7 @@ export default function ReturnPolicyPage() {
             <h2 className="text-xl font-bold text-secondary mb-3">إجراءات الإرجاع</h2>
             <ol className="space-y-3 text-sm">
               {[
-                'تواصلي معنا عبر الواتساب أو البريد الإلكتروني',
+                'تواصلي معنا عبر البريد الإلكتروني support@nuviabody.shop',
                 'أرسلي صوراً للمنتج ورقم الطلب',
                 'سيقوم فريقنا بمراجعة الطلب خلال 24 ساعة',
                 'ترتيب الاستلام أو الاستبدال حسب الاتفاق',

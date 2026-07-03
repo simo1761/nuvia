@@ -15,7 +15,6 @@ export const siteConfig = {
 
   contact: {
     email: 'support@nuviabody.shop',
-    phone: '+966 XX XXX XXXX',
     address: 'المملكة العربية السعودية',
     workingHours: 'الأحد - الخميس، 9 صباحاً - 6 مساءً',
   },

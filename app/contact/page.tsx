@@ -32,16 +32,6 @@ export default function ContactPage() {
               <div className="space-y-4 text-sm">
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-bg-alt">
                   <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center text-primary flex-shrink-0 text-lg">
-                    📞
-                  </div>
-                  <div>
-                    <p className="font-semibold text-secondary">الهاتف</p>
-                    <p className="text-nuvia-light" dir="ltr">{siteConfig.contact.phone}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-bg-alt">
-                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center text-primary flex-shrink-0 text-lg">
                     📧
                   </div>
                   <div>

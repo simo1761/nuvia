@@ -40,6 +40,8 @@ export default function LPStoryStrip() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const touchStartY = useRef(0);
   const stripRef = useRef<HTMLDivElement>(null);
+  // Tracks whether we pushed a history entry for the open story
+  const historyPushed = useRef(false);
 
   // Lazy-load video thumbnails only when strip scrolls into view
   useEffect(() => {
@@ -56,14 +58,39 @@ export default function LPStoryStrip() {
     return () => observer.disconnect();
   }, []);
 
+  // Hardware back button intercept: close story instead of leaving the page
+  useEffect(() => {
+    const handlePop = () => {
+      if (historyPushed.current) {
+        historyPushed.current = false;
+        setActive(null);
+        setProgress(0);
+      }
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
+
+  // When story closes for any reason OTHER than the back button,
+  // consume the pushed history entry so it doesn't linger.
+  useEffect(() => {
+    if (active === null && historyPushed.current) {
+      historyPushed.current = false;
+      window.history.back();
+    }
+  }, [active]);
+
   const openStory = (idx: number) => {
     setProgress(0);
     setActive(idx);
+    window.history.pushState({ storyOpen: true }, '');
+    historyPushed.current = true;
   };
 
   const closeStory = () => {
     setActive(null);
     setProgress(0);
+    // history.back() is called by the useEffect above
   };
 
   const goNext = () => {

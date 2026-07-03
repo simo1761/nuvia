@@ -84,13 +84,12 @@ export default function ShippingPolicyPage() {
 
           <section>
             <h2 className="text-xl font-bold text-secondary mb-3 flex items-center gap-2">
-              📞 تواصل معنا
+              📧 تواصل معنا
             </h2>
             <p className="text-sm">
               لأي استفسار حول طلبك أو شحنتك، تواصلي معنا عبر:
             </p>
             <ul className="text-sm mt-2 space-y-1">
-              <li>📱 واتساب: +966 XX XXX XXXX</li>
               <li>📧 البريد: support@nuviabody.shop</li>
               <li>🕐 ساعات العمل: الأحد - الخميس، 9 صباحاً - 6 مساءً</li>
             </ul>

@@ -125,13 +125,13 @@ export default function LPOrderForm() {
               <p className="font-bold text-secondary text-base">باقة RF الكاملة</p>
               <p className="text-nuvia-light text-xs mt-0.5">جهاز RF + جل التوصيل الاحترافي</p>
               <div className="flex items-baseline gap-2 mt-2">
-                <span className="text-nuvia-light text-xs line-through">٤٩٩ ريال</span>
-                <span className="text-primary font-bold text-2xl">٢٣٩ <span className="text-sm font-normal">ريال</span></span>
+                <span className="text-nuvia-light text-xs line-through">499 ريال</span>
+                <span className="text-primary font-bold text-2xl">239 <span className="text-sm font-normal">ريال</span></span>
               </div>
             </div>
             <div className="text-left flex-shrink-0">
               <span className="inline-block bg-nuvia-success text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                وفري ٢٦٠ ريال
+                وفري 260 ريال
               </span>
               <p className="text-nuvia-light text-[11px] mt-2">🚚 شحن مجاني</p>
               <p className="text-nuvia-light text-[11px]">💵 دفع عند الاستلام</p>

@@ -49,7 +49,7 @@ export default function LPReviewsCarousel() {
           آراء النساء اللي بدأن ✨
         </h2>
         <p className="text-center text-nuvia-light text-sm mb-8 font-tajawal">
-          +١٢٤ تقييم حقيقي — متوسط ⭐ ٤.٨/٥
+          +124 تقييم حقيقي — متوسط ⭐ 4.8/5
         </p>
 
         <div

@@ -63,13 +63,13 @@ export default function HomePage() {
             </h1>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-baseline gap-2">
-                <span className="text-white/40 text-xs line-through">٤٩٩</span>
-                <span className="text-primary font-bold text-[28px] leading-none">٢٣٩</span>
+                <span className="text-white/40 text-xs line-through">499</span>
+                <span className="text-primary font-bold text-[28px] leading-none">239</span>
                 <span className="text-white/65 text-sm">ريال</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Stars />
-                <span className="text-white/60 text-xs">٤.٨ (+١٢٤)</span>
+                <span className="text-white/60 text-xs">4.8 (+124)</span>
               </div>
             </div>
             <a
@@ -117,12 +117,12 @@ export default function HomePage() {
               </ul>
               <div className="flex items-center gap-3 mb-4">
                 <Stars />
-                <span className="text-white/80 font-semibold">٤.٨/٥</span>
-                <span className="text-white/45 text-sm">(+١٢٤ تقييم)</span>
+                <span className="text-white/80 font-semibold">4.8/5</span>
+                <span className="text-white/45 text-sm">(+124 تقييم)</span>
               </div>
               <div className="flex items-baseline gap-3 mb-6">
-                <span className="text-white/40 text-base line-through">٤٩٩ ريال</span>
-                <span className="text-primary font-bold text-4xl">٢٣٩ <span className="text-xl font-normal text-white/70">ريال</span></span>
+                <span className="text-white/40 text-base line-through">499 ريال</span>
+                <span className="text-primary font-bold text-4xl">239 <span className="text-xl font-normal text-white/70">ريال</span></span>
               </div>
               <a
                 href="#order"
@@ -309,9 +309,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
               {[
-                { n: '١', title: 'نظّفي البشرة وضعي الجل الناقل', desc: 'حطي طبقة سخية من الجل على المنطقة المستهدفة — هذا يوصّل الطاقة صح.' },
-                { n: '٢', title: 'حرّكي الجهاز بحركات دائرية', desc: 'شغّلي الجهاز على الوضع المناسب وحرّكيه بدوائر بطيئة لمدة 15 دقيقة.' },
-                { n: '٣', title: 'امسحي المنطقة وكرّري 3 مرات أسبوعياً', title2: 'اسحقي المنطقة، وكرّري 3 مرات أسبوعياً', desc: 'النتائج تبدأ من الأسبوع الثاني — والتزام 4 أسابيع يعطي فرق مرئي.' },
+                { n: '1', title: 'نظّفي البشرة وضعي الجل الناقل', desc: 'حطي طبقة سخية من الجل على المنطقة المستهدفة — هذا يوصّل الطاقة صح.' },
+                { n: '2', title: 'حرّكي الجهاز بحركات دائرية', desc: 'شغّلي الجهاز على الوضع المناسب وحرّكيه بدوائر بطيئة لمدة 15 دقيقة.' },
+                { n: '3', title: 'امسحي المنطقة وكرّري 3 مرات أسبوعياً', title2: 'اسحقي المنطقة، وكرّري 3 مرات أسبوعياً', desc: 'النتائج تبدأ من الأسبوع الثاني — والتزام 4 أسابيع يعطي فرق مرئي.' },
               ].map((s) => (
                 <div key={s.n} className="flex items-start gap-4 bg-white rounded-2xl p-4 shadow-sm border border-accent/40">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-dark text-white font-bold text-lg flex items-center justify-center flex-shrink-0 shadow-gold">
@@ -337,7 +337,7 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   <span className="absolute bottom-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full font-tajawal">
-                    ١٥ دقيقة · ٣ مرات أسبوعياً
+                    15 دقيقة · 3 مرات أسبوعياً
                   </span>
                 </div>
               </div>
@@ -455,7 +455,7 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary/55 via-transparent to-transparent" />
                   <div className="absolute bottom-3 inset-x-3 flex items-center justify-between">
                     <span className="bg-black/50 text-white text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-sm font-tajawal">قبل</span>
-                    <span className="bg-primary text-white text-[10px] font-bold px-2.5 py-1 rounded-full font-tajawal">بعد ٤ أسابيع</span>
+                    <span className="bg-primary text-white text-[10px] font-bold px-2.5 py-1 rounded-full font-tajawal">بعد 4 أسابيع</span>
                   </div>
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function HomePage() {
             شو موجود في الباقة؟
           </h2>
           <p className="text-center text-nuvia-light text-sm mb-8">
-            القيمة الكاملة ٤٩٩ ريال — اليوم بس ٢٣٩ ريال
+            القيمة الكاملة 499 ريال — اليوم بس 239 ريال
           </p>
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-accent/60">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -596,7 +596,7 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-secondary/70 to-transparent py-5 px-4">
                   <p className="text-white font-bold text-sm font-tajawal text-center">
-                    ٢-٥ أيام · شحن مجاني لجميع دول الخليج
+                    2-5 أيام · شحن مجاني لجميع دول الخليج
                   </p>
                 </div>
               </div>
@@ -618,9 +618,9 @@ export default function HomePage() {
           <span className="text-4xl block mb-4">✨</span>
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">جاهزة تبدأين؟</h2>
           <p className="text-white/75 text-sm leading-relaxed mb-3">
-            باقة كاملة بتقنية العيادات · ٢٣٩ ريال · دفع عند الاستلام · ضمان 30 يوم
+            باقة كاملة بتقنية العيادات · 239 ريال · دفع عند الاستلام · ضمان 30 يوم
           </p>
-          <p className="text-white/60 text-xs mb-8">انضمي لأكثر من ١٠,٠٠٠ عميلة سعيدة في دول الخليج</p>
+          <p className="text-white/60 text-xs mb-8">انضمي لأكثر من 10,000 عميلة سعيدة في دول الخليج</p>
           <a
             href="#order"
             className="inline-flex items-center bg-gradient-to-r from-primary to-primary-dark text-white px-10 py-4 rounded-full font-bold text-lg shadow-gold hover:shadow-gold-lg hover:-translate-y-0.5 transition-all order-btn-pulse"

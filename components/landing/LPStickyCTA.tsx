@@ -26,7 +26,7 @@ export default function LPStickyCTA() {
       <div className="bg-white border-t-2 border-primary/30 shadow-gold-lg px-4 py-3 flex items-center gap-3">
         <div className="text-right flex-shrink-0">
           <p className="text-xs text-nuvia-light">باقة RF الاحترافية</p>
-          <p className="font-bold text-secondary text-lg leading-tight">٢٣٩ ريال</p>
+          <p className="font-bold text-secondary text-lg leading-tight">239 ريال</p>
         </div>
         <a
           href="#order"
