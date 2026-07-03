@@ -35,8 +35,8 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════ */}
       <section className="relative bg-secondary overflow-hidden">
 
-        {/* ── MOBILE: full-width image with text overlay ── */}
-        <div className="relative lg:hidden w-full aspect-[3/4] sm:aspect-[2/3]">
+        {/* ── MOBILE: full-width image + compact overlay — pack + CTA visible in one screen ── */}
+        <div className="relative lg:hidden w-full aspect-[4/5] sm:aspect-[2/3]">
           <Image
             src="/images/lp/hero-pack.webp"
             alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
@@ -45,59 +45,39 @@ export default function HomePage() {
             priority
             sizes="100vw"
           />
-          {/* Gradient overlay — readable text at bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/60 to-secondary/10 pointer-events-none" />
+          {/* Gradient: transparent top (pack visible) → dark only at bottom 40% (text readable) */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.08) 60%, transparent 78%)' }}
+          />
 
-          {/* Badge */}
-          <div className="absolute top-4 right-4 z-10">
-            <span className="inline-flex items-center gap-1 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-gold">
-              🌟 تقنية طبية في بيتكِ
-            </span>
-          </div>
-
-          {/* Text overlay at bottom */}
-          <div className="absolute bottom-0 inset-x-0 z-10 px-5 pb-6">
-            <h1 className="text-[26px] font-bold text-white leading-tight mb-2">
+          {/* Compact text — everything visible without scrolling */}
+          <div className="absolute bottom-0 inset-x-0 z-10 px-4 pb-4">
+            <h1 className="text-2xl font-bold text-white leading-snug mb-2">
               باقة RF لشد الجلد<br />
               <span className="text-primary">ومحاربة السيلوليت</span>
             </h1>
-            <p className="text-white/70 text-sm mb-3 leading-relaxed">
-              تقنية طبية تصل لعمق الجلد — في بيتكِ، بخصوصية تامة
-            </p>
-            <div className="flex items-center gap-2 mb-3">
-              <Stars />
-              <span className="text-white/80 text-sm font-semibold">٤.٨/٥</span>
-              <span className="text-white/50 text-xs">(+١٢٤ تقييم)</span>
-            </div>
-            <div className="flex items-baseline gap-3 mb-4">
-              <span className="text-white/40 text-sm line-through">٤٩٩ ريال</span>
-              <span className="text-primary font-bold text-3xl">٢٣٩ <span className="text-lg font-normal text-white/80">ريال</span></span>
+            {/* Price + stars on one line — saves vertical space */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-baseline gap-2">
+                <span className="text-white/40 text-xs line-through">٤٩٩</span>
+                <span className="text-primary font-bold text-[28px] leading-none">٢٣٩</span>
+                <span className="text-white/65 text-sm">ريال</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Stars />
+                <span className="text-white/60 text-xs">٤.٨ (+١٢٤)</span>
+              </div>
             </div>
             <a
               href="#order"
-              className="inline-flex items-center justify-center w-full bg-gradient-to-r from-primary to-primary-dark text-white py-4 rounded-full font-bold text-lg shadow-gold hover:shadow-gold-lg hover:-translate-y-0.5 transition-all order-btn-pulse"
+              className="flex items-center justify-center w-full bg-gradient-to-r from-primary to-primary-dark text-white py-3.5 rounded-full font-bold text-base shadow-gold hover:-translate-y-0.5 transition-all order-btn-pulse"
             >
               اطلبي الآن — الدفع عند الاستلام
             </a>
-            <p className="text-white/35 text-xs mt-2 text-center">
+            <p className="text-white/25 text-[10px] mt-1.5 text-center">
               💵 دفع عند الاستلام · 🚚 شحن مجاني · ✓ ضمان 30 يوم
             </p>
-          </div>
-        </div>
-
-        {/* Trust bar mobile */}
-        <div className="lg:hidden bg-white/5 border-t border-white/10 px-4 py-3">
-          <div className="flex justify-around text-center max-w-xs mx-auto">
-            {[
-              { icon: '💵', label: 'دفع عند الاستلام' },
-              { icon: '🚚', label: 'شحن مجاني' },
-              { icon: '🔄', label: 'ضمان 30 يوم' },
-            ].map((t) => (
-              <div key={t.label}>
-                <div className="text-base">{t.icon}</div>
-                <p className="text-white/55 text-[10px] mt-0.5">{t.label}</p>
-              </div>
-            ))}
           </div>
         </div>
 
