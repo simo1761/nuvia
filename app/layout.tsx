@@ -9,7 +9,7 @@ const TrackingPixels = dynamic(() => import('@/components/tracking/TrackingPixel
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
-  weight: ['400', '500', '700', '800'],
+  weight: ['400', '500', '700'],
   variable: '--font-tajawal',
   display: 'swap',
   preload: true,

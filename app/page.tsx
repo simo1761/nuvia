@@ -137,14 +137,23 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-md">
-              <Image
-                src="/images/lp/failed-solutions.webp"
-                alt="منتجات مضادة للسيلوليت فاشلة"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-rose-100/70 to-orange-50/70 -z-10 blur-sm" />
+              <div className="relative rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.18)] ring-1 ring-black/5 rotate-1">
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src="/images/lp/failed-solutions.webp"
+                    alt="منتجات مضادة للسيلوليت فاشلة"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/30 to-transparent" />
+                  <span className="absolute bottom-3 right-3 bg-secondary/80 text-white text-[11px] font-bold px-3 py-1.5 rounded-full backdrop-blur-sm font-tajawal">
+                    حلول جربتِها… وما اشتغلت
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -189,14 +198,20 @@ export default function HomePage() {
             </div>
 
             {/* Skin cross-section */}
-            <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-              <Image
-                src="/images/lp/skin-cross-section.webp"
-                alt="مقطع جلد يوضح تأثير تقنية RF"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-[2rem] bg-primary/15 blur-xl" />
+              <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(212,160,23,0.3)] ring-1 ring-primary/25">
+                <Image
+                  src="/images/lp/skin-cross-section.webp"
+                  alt="مقطع جلد يوضح تأثير تقنية RF"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <span className="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md font-tajawal">
+                  تقنية طبية معتمدة
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -211,7 +226,7 @@ export default function HomePage() {
             نفس النتيجة… بدون عيادة ولا إحراج
           </h2>
           <p className="text-center text-nuvia-light text-sm mb-8">خصوصية تامة، على راحتكِ، وبتكلفة جلسة واحدة بس</p>
-          <div className="relative w-full rounded-2xl overflow-hidden shadow-lg aspect-video">
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.25)] ring-1 ring-black/10 aspect-video">
             <Image
               src="/images/lp/diptych-clinic-vs-home.webp"
               alt="مقارنة العيادة مع الاستخدام في البيت"
@@ -261,14 +276,23 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg">
-              <Image
-                src="/images/lp/tutorial-steps.webp"
-                alt="خطوات استخدام جهاز RF"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-3xl bg-accent/25 blur-lg -z-10" />
+              <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_48px_rgba(212,160,23,0.2)] ring-1 ring-primary/20 -rotate-1">
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/images/lp/tutorial-steps.webp"
+                    alt="خطوات استخدام جهاز RF"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  <span className="absolute bottom-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full font-tajawal">
+                    ١٥ دقيقة · ٣ مرات أسبوعياً
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -281,14 +305,18 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto px-4">
           <div className="bg-gradient-to-br from-secondary/5 to-primary/5 rounded-3xl p-6 sm:p-8 border border-accent/60">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md">
-                <Image
-                  src="/images/lp/authority-doctor.webp"
-                  alt="استشارية العناية بالبشرة"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                />
+              <div className="relative">
+                <div className="absolute bottom-0 translate-x-2.5 translate-y-2.5 w-full h-3/4 rounded-2xl bg-primary/20 -z-10" />
+                <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] ring-2 ring-primary/30">
+                  <Image
+                    src="/images/lp/authority-doctor.webp"
+                    alt="استشارية العناية بالبشرة"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/30 to-transparent" />
+                </div>
               </div>
               <div>
                 <span className="inline-block bg-accent text-primary-dark text-xs font-bold px-3 py-1 rounded-full mb-4">
@@ -322,14 +350,20 @@ export default function HomePage() {
           <p className="text-center text-nuvia-light text-sm mb-8">
             الإحساس مثل مساج دافئ بالحجر الساخن. لا حرق، لا ألم، ولا فترة نقاهة.
           </p>
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md mb-6">
-            <Image
-              src="/images/lp/pain-scale.webp"
-              alt="مقارنة الألم — جهاز نوفيا مقابل طرق العيادات"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
+          <div className="relative mb-6">
+            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-red-50/60 to-emerald-50/60 -z-10 blur-md" />
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.15)] ring-1 ring-black/5">
+              <Image
+                src="/images/lp/pain-scale.webp"
+                alt="مقارنة الألم — جهاز نوفيا مقابل طرق العيادات"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 768px"
+              />
+              <span className="absolute top-3 left-3 bg-nuvia-success text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md font-tajawal">
+                ✓ مريح تماماً
+              </span>
+            </div>
           </div>
           <div className="flex items-center justify-between text-xs font-tajawal text-nuvia-text bg-white rounded-xl px-4 py-3 border border-accent">
             <span>الإبر والعمليات (ألم عالٍ) ←</span>
@@ -361,7 +395,7 @@ export default function HomePage() {
             style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
           >
             {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="flex-none w-52 sm:w-64 snap-start rounded-2xl overflow-hidden shadow-md border border-accent/60">
+              <div key={n} className="flex-none w-52 sm:w-64 snap-start rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-accent/60 bg-white">
                 <div className="relative w-full aspect-[3/4]">
                   <Image
                     src={`/images/ba/before-after-${n}.webp`}
@@ -370,6 +404,11 @@ export default function HomePage() {
                     className="object-cover"
                     sizes="(max-width: 640px) 208px, 256px"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/55 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 inset-x-3 flex items-center justify-between">
+                    <span className="bg-black/50 text-white text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-sm font-tajawal">قبل</span>
+                    <span className="bg-primary text-white text-[10px] font-bold px-2.5 py-1 rounded-full font-tajawal">بعد ٤ أسابيع</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -378,14 +417,17 @@ export default function HomePage() {
           {/* Texture close-up */}
           <div className="max-w-2xl mx-auto">
             <p className="text-center text-nuvia-light text-xs mb-3">ملمس البشرة عن قرب — قبل وبعد</p>
-            <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-md">
-              <Image
-                src="/images/lp/before-after-texture.webp"
-                alt="ملمس البشرة قبل وبعد استخدام جهاز RF"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 672px"
-              />
+            <div className="relative">
+              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-accent/50 to-primary/10 blur-xl -z-10" />
+              <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(212,160,23,0.2)] ring-1 ring-primary/20">
+                <Image
+                  src="/images/lp/before-after-texture.webp"
+                  alt="ملمس البشرة قبل وبعد استخدام جهاز RF"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 672px"
+                />
+              </div>
             </div>
             <p className="text-center text-nuvia-light text-[11px] mt-2 font-tajawal">
               النتائج تختلف من شخص لآخر وترتبط بالاستمرار في الاستخدام.
@@ -422,14 +464,17 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-sm">
-              <Image
-                src="/images/lp/whats-in-box.webp"
-                alt="محتويات باقة RF من نوفيا"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 672px"
-              />
+            <div className="relative mt-6">
+              <div className="absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-accent/50 -z-10" />
+              <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-[0_16px_48px_rgba(212,160,23,0.2)] ring-1 ring-primary/20">
+                <Image
+                  src="/images/lp/whats-in-box.webp"
+                  alt="محتويات باقة RF من نوفيا"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 672px"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -492,14 +537,21 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md">
-              <Image
-                src="/images/lp/cod-delivery.webp"
-                alt="توصيل الطلب ودفع عند الاستلام"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+            <div className="relative">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.15)] ring-1 ring-black/5">
+                <Image
+                  src="/images/lp/cod-delivery.webp"
+                  alt="توصيل الطلب ودفع عند الاستلام"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-secondary/70 to-transparent py-5 px-4">
+                  <p className="text-white font-bold text-sm font-tajawal text-center">
+                    ٢-٥ أيام · شحن مجاني لجميع دول الخليج
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

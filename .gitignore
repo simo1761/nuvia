@@ -5,3 +5,6 @@ node_modules/
 .env*.local
 myphotos/
 *.log
+
+# Duplicate source images (already organized into /images/lp, /ba, /reviews)
+public/images/NEw/

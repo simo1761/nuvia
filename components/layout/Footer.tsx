@@ -120,12 +120,6 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <span>💬</span>
-                <a href={siteConfig.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  واتساب
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
                 <span>🕐</span>
                 <span>{siteConfig.contact.workingHours}</span>
               </li>

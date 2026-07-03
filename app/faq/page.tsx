@@ -53,12 +53,10 @@ export default function FAQPage() {
             فريقنا جاهز للإجابة على جميع استفساراتك
           </p>
           <a
-            href="https://wa.me/966XXXXXXXXX"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-full font-bold text-sm transition-colors"
+            href="/contact"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary-dark text-white px-5 py-2.5 rounded-full font-bold text-sm transition-colors shadow-gold"
           >
-            تواصلي معنا عبر واتساب
+            📧 تواصلي مع فريق الدعم
           </a>
         </div>
       </div>

@@ -3,11 +3,36 @@
 import { useState, useRef, useEffect } from 'react';
 
 const stories = [
-  { src: '/videos/stories/rev1.mp4', label: 'التجربة الأولى' },
-  { src: '/videos/stories/rev2.mp4', label: 'الأسبوع الأول' },
-  { src: '/videos/stories/rev3.mp4', label: 'الأسبوع الثاني' },
-  { src: '/videos/stories/rev4.mp4', label: 'الأسبوع الثالث' },
-  { src: '/videos/stories/rev5.mp4', label: 'النتيجة ✨' },
+  {
+    src: '/videos/stories/rev1.mp4',
+    label: 'التجربة الأولى',
+    ring: 'linear-gradient(135deg,#F472B6,#E11D48)',
+    bg: 'linear-gradient(135deg,#FFEEF5,#FFB3CE)',
+  },
+  {
+    src: '/videos/stories/rev2.mp4',
+    label: 'الأسبوع الأول',
+    ring: 'linear-gradient(135deg,#FB923C,#D97706)',
+    bg: 'linear-gradient(135deg,#FFF3E6,#FFE0B2)',
+  },
+  {
+    src: '/videos/stories/rev3.mp4',
+    label: 'الأسبوع الثاني',
+    ring: 'linear-gradient(135deg,#FBBF24,#D97706)',
+    bg: 'linear-gradient(135deg,#FFFDE7,#FFF3C4)',
+  },
+  {
+    src: '/videos/stories/rev4.mp4',
+    label: 'الأسبوع الثالث',
+    ring: 'linear-gradient(135deg,#34D399,#059669)',
+    bg: 'linear-gradient(135deg,#EEFBF3,#BBFCE8)',
+  },
+  {
+    src: '/videos/stories/rev5.mp4',
+    label: 'النتيجة ✨',
+    ring: 'linear-gradient(135deg,#D4A017,#A97830)',
+    bg: 'linear-gradient(135deg,#FFF8EB,#FAECD8)',
+  },
 ];
 
 export default function LPStoryStrip() {
@@ -66,7 +91,6 @@ export default function LPStoryStrip() {
     };
   }, [active]);
 
-  // Lock body scroll while story is open
   useEffect(() => {
     if (active !== null) {
       document.body.style.overflow = 'hidden';
@@ -95,18 +119,21 @@ export default function LPStoryStrip() {
                 className="flex flex-col items-center gap-2 flex-shrink-0"
                 aria-label={`مشاهدة ${s.label}`}
               >
-                {/* Circular thumbnail */}
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-[3px] border-primary overflow-hidden shadow-gold bg-bg-alt flex-shrink-0">
-                  <video
-                    src={`${s.src}#t=0.5`}
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* Play overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                    <svg className="w-5 h-5 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24">
+                {/* CSS-only story ring — zero network requests */}
+                <div
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[3px] flex-shrink-0"
+                  style={{ background: s.ring }}
+                >
+                  <div
+                    className="w-full h-full rounded-full flex items-center justify-center"
+                    style={{ background: s.bg }}
+                  >
+                    <svg
+                      className="w-6 h-6 sm:w-7 sm:h-7 drop-shadow"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      style={{ color: '#5c3d1e', opacity: 0.7 }}
+                    >
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
@@ -120,7 +147,7 @@ export default function LPStoryStrip() {
         </div>
       </section>
 
-      {/* ── Fullscreen Story Player ── */}
+      {/* ── Fullscreen Story Player — video loads ONLY when user clicks ── */}
       {active !== null && (
         <div
           className="fixed inset-0 z-[70] bg-black flex flex-col select-none"
@@ -158,13 +185,14 @@ export default function LPStoryStrip() {
             <div className="w-9" />
           </div>
 
-          {/* Video */}
+          {/* Video — created here for the first time, loaded on demand */}
           <div className="flex-1 relative overflow-hidden">
             <video
               ref={videoRef}
               key={active}
               src={stories[active].src}
               playsInline
+              preload="auto"
               className="absolute inset-0 w-full h-full object-contain"
             />
 

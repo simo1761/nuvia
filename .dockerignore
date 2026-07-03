@@ -4,3 +4,4 @@ node_modules
 backend
 docker-compose.yml
 *.md
+public/images/NEw/

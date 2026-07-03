@@ -11,7 +11,6 @@ export const siteConfig = {
     tiktok: 'https://tiktok.com/@nuvia_ksa',
     snapchat: 'https://snapchat.com/add/nuvia_ksa',
     twitter: 'https://twitter.com/nuvia_ksa',
-    whatsapp: 'https://wa.me/966XXXXXXXXX',
   },
 
   contact: {
