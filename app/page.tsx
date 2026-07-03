@@ -41,7 +41,8 @@ export default function HomePage() {
             src="/images/lp/hero-pack.webp"
             alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
             fill
-            className="object-contain object-center"
+            className="object-cover"
+            style={{ objectPosition: 'center 65%' }}
             priority
             sizes="100vw"
           />

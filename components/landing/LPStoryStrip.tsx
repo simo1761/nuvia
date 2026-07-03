@@ -8,27 +8,27 @@ const INSTA_RING = 'linear-gradient(135deg, #feda75 0%, #fa7e1e 30%, #d62976 65%
 const stories = [
   {
     src: '/videos/stories/rev1.mp4',
-    name: 'نور الشمري',
+    name: 'nour.sh90',
     avatar: '/images/reviews/review1.webp',
   },
   {
     src: '/videos/stories/rev2.mp4',
-    name: 'سارة العتيبي',
+    name: 'sara_366_',
     avatar: '/images/reviews/review2.webp',
   },
   {
     src: '/videos/stories/rev3.mp4',
-    name: 'هنوف القحطاني',
+    name: 'hnouf2369',
     avatar: '/images/reviews/review3.webp',
   },
   {
     src: '/videos/stories/rev4.mp4',
-    name: 'منى الزهراني',
+    name: 'mona.z2210',
     avatar: '/images/reviews/review4.webp',
   },
   {
     src: '/videos/stories/rev5.mp4',
-    name: 'رنا الحربي',
+    name: 'rana_hrb27',
     avatar: '/images/reviews/review5.webp',
   },
 ];
