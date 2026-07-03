@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Tajawal } from 'next/font/google';
-import dynamic from 'next/dynamic';
+import Script from 'next/script';
 import './globals.css';
 import LayoutShell from '@/components/layout/LayoutShell';
 import { siteConfig } from '@/data/site-config';
 
-const TrackingPixels = dynamic(() => import('@/components/tracking/TrackingPixels'), { ssr: false, loading: () => null });
+// Read at request time (server component) — works even if not set at build time
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '571480235951205';
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
@@ -53,9 +54,25 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={tajawal.variable}>
+      <head>
+        {/* Preconnect to Facebook CDN — reduces pixel load latency */}
+        <link rel="preconnect" href="https://connect.facebook.net" />
+        <link rel="preconnect" href="https://www.facebook.com" />
+      </head>
       <body className="font-tajawal bg-bg text-nuvia-text antialiased">
-        <TrackingPixels />
         <LayoutShell>{children}</LayoutShell>
+
+        {/* Meta Pixel — afterInteractive: loads after page is usable, never blocks render */}
+        <Script id="fb-pixel" strategy="afterInteractive">{`
+          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){
+          n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+          s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+          (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init','${PIXEL_ID}');
+          fbq('track','PageView');
+        `}</Script>
       </body>
     </html>
   );

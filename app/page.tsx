@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import LPReviewsCarousel from '@/components/landing/LPReviewsCarousel';
+import LPOrderForm       from '@/components/landing/LPOrderForm';
+import LPFAQAccordion    from '@/components/landing/LPFAQAccordion';
 
-const LPStoryStrip      = dynamic(() => import('@/components/landing/LPStoryStrip'), { ssr: false });
-const LPReviewsCarousel = dynamic(() => import('@/components/landing/LPReviewsCarousel'));
-const LPOrderForm       = dynamic(() => import('@/components/landing/LPOrderForm'));
-const LPFAQAccordion    = dynamic(() => import('@/components/landing/LPFAQAccordion'));
-const LPStickyCTA       = dynamic(() => import('@/components/landing/LPStickyCTA'), { ssr: false });
-const MetaViewContent   = dynamic(() => import('@/components/tracking/MetaViewContent'), { ssr: false });
+// ssr: false only for components that use browser-only APIs
+const LPStoryStrip    = dynamic(() => import('@/components/landing/LPStoryStrip'), { ssr: false });
+const LPStickyCTA     = dynamic(() => import('@/components/landing/LPStickyCTA'),  { ssr: false });
+const MetaViewContent = dynamic(() => import('@/components/tracking/MetaViewContent'), { ssr: false });
 
 export const metadata: Metadata = {
   title: 'باقة RF لشد الجلد وعلاج السيلوليت — نوفيا كلينيك',
@@ -99,8 +100,8 @@ export default function HomePage() {
 
         {/* ── DESKTOP: two-column ── */}
         <div className="hidden lg:block py-16 px-8 relative">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full opacity-60" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full opacity-40" />
           <div className="relative max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
 
             {/* Copy */}
