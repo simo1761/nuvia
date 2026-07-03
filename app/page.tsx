@@ -35,21 +35,25 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════ */}
       <section className="relative bg-secondary overflow-hidden">
 
-        {/* ── MOBILE: full-width image + compact overlay — pack + CTA visible in one screen ── */}
-        <div className="relative lg:hidden w-full aspect-[4/5] sm:aspect-[2/3]">
+        {/* ── MOBILE: cropped pack image (landscape → portrait crop) + gradient into dark page ── */}
+        <div className="relative lg:hidden w-full aspect-[4/5]">
           <Image
-            src="/images/lp/hero-pack.webp"
+            src="/images/lp/hero-pack-mobile.webp"
             alt="باقة RF لشد الجلد ومحاربة السيلوليت — نوفيا"
             fill
-            className="object-cover"
-            style={{ objectPosition: 'center 65%' }}
+            className="object-cover object-center"
             priority
             sizes="100vw"
           />
-          {/* Gradient: transparent top (pack visible) → dark only at bottom 40% (text readable) */}
+          {/*
+            Gradient logic:
+            - Top 36%: transparent — pack & products clearly visible
+            - 36–58%: smooth fade — marble surface blends away
+            - 58–100%: #1A1A2E — matches page bg exactly (seamless join) + text readable
+          */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.08) 60%, transparent 78%)' }}
+            style={{ background: 'linear-gradient(to top, #1A1A2E 0%, #1A1A2E 28%, rgba(26,26,46,0.88) 42%, rgba(26,26,46,0.35) 58%, rgba(26,26,46,0.0) 72%)' }}
           />
 
           {/* Compact text — everything visible without scrolling */}
