@@ -50,7 +50,9 @@ export default function LPOrderForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const phoneValid = phone.length > 0 && validatePhone(phone, country);
+  // Strip leading 0 before validation — accept "05..." and "5..." equally
+  const phoneStripped = phone.replace(/^0/, '');
+  const phoneValid = phone.length > 0 && validatePhone(phoneStripped, country);
   const rule = PHONE_RULES[country];
   const canSubmit =
     name.trim().length >= 2 &&
@@ -65,7 +67,7 @@ export default function LPOrderForm() {
     setStatus('loading');
     setErrorMsg('');
 
-    const fullPhone = `${rule?.dialCode ?? ''}${phone.replace(/\D/g, '')}`;
+    const fullPhone = `${rule?.dialCode ?? ''}${phoneStripped.replace(/\D/g, '')}`;
 
     try {
       const res = await fetch('/api/order', {
@@ -189,14 +191,14 @@ export default function LPOrderForm() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                 placeholder={rule ? `${rule.starts[0]}${'X'.repeat(rule.digits - 1)}` : '5XXXXXXXX'}
-                maxLength={rule?.digits ?? 10}
+                maxLength={(rule?.digits ?? 10) + 1}
                 className="flex-1 px-4 py-3 focus:outline-none text-secondary font-mono text-sm bg-white"
                 required
               />
             </div>
             {phone.length > 0 && !phoneValid && (
               <p className="text-nuvia-error text-xs mt-1 font-tajawal">
-                رقم غير صحيح — يجب أن يبدأ بـ {rule?.starts.join(' أو ')} ويتكون من {rule?.digits} أرقام
+                رقم غير صحيح — {rule?.digits} أرقام تبدأ بـ {rule?.starts.join(' أو ')} (مثال: 0{rule?.starts[0]}... أو {rule?.starts[0]}...)
               </p>
             )}
           </div>

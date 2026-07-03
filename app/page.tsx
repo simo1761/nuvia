@@ -63,24 +63,35 @@ export default function HomePage() {
             </h1>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-baseline gap-2">
-                <span className="text-white/40 text-xs line-through">499</span>
-                <span className="text-primary font-bold text-[28px] leading-none">239</span>
-                <span className="text-white/65 text-sm">ريال</span>
+                <span className="text-white/40 text-sm line-through">499</span>
+                <span className="text-primary font-bold text-3xl leading-none">239</span>
+                <span className="text-white/65 text-base">ريال</span>
               </div>
-              <div className="flex items-center gap-1.5">
+              {/* Stars — clickable to scroll to reviews section */}
+              <a href="#reviews" className="flex items-center gap-1.5">
                 <Stars />
-                <span className="text-white/60 text-xs">4.8 (+124)</span>
-              </div>
+                <span className="text-white/65 text-sm">4.8 (+124)</span>
+              </a>
             </div>
             <a
               href="#order"
-              className="flex items-center justify-center w-full bg-gradient-to-r from-primary to-primary-dark text-white py-3.5 rounded-full font-bold text-base shadow-gold hover:-translate-y-0.5 transition-all order-btn-pulse"
+              className="flex items-center justify-center w-full bg-gradient-to-r from-primary to-primary-dark text-white py-4 rounded-full font-bold text-lg shadow-gold hover:-translate-y-0.5 transition-all order-btn-pulse"
             >
               اطلبي الآن — الدفع عند الاستلام
             </a>
-            <p className="text-white/25 text-[10px] mt-1.5 text-center">
-              💵 دفع عند الاستلام · 🚚 شحن مجاني · ✓ ضمان 30 يوم
-            </p>
+            {/* Trust badges — clearly visible below CTA */}
+            <div className="flex justify-around mt-4 pt-3 border-t border-white/15">
+              {[
+                { icon: '💵', label: 'دفع عند الاستلام' },
+                { icon: '🚚', label: 'شحن مجاني' },
+                { icon: '🛡️', label: 'ضمان 30 يوم' },
+              ].map((t) => (
+                <div key={t.label} className="flex flex-col items-center gap-1">
+                  <span className="text-xl">{t.icon}</span>
+                  <span className="text-white/80 text-xs font-medium">{t.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -168,7 +179,7 @@ export default function HomePage() {
               <h2 className="text-2xl sm:text-3xl font-bold text-secondary mb-3">
                 جربتِ كل شيء… ولا تغيير شيء؟
               </h2>
-              <p className="text-nuvia-text text-sm leading-relaxed mb-6">
+              <p className="text-nuvia-text text-base leading-relaxed mb-6">
                 كريمات، رولات خشب، تمارين، محاولات… والسيلوليت ما راح. المشكلة ليست فيكِ — لأن الحلول اللي تشتغل على السطح لا تصل لمكان المشكلة. السيلوليت يتكون تحت الجلد، ولا شيء من قبل كان يعالج السبب.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -180,7 +191,7 @@ export default function HomePage() {
                 ].map((p) => (
                   <div key={p.text} className="flex items-center gap-3 bg-bg-alt rounded-xl p-3 border border-accent/50">
                     <span className="text-xl flex-shrink-0">{p.icon}</span>
-                    <p className="text-nuvia-text text-xs font-medium">{p.text}</p>
+                    <p className="text-nuvia-text text-sm font-medium">{p.text}</p>
                   </div>
                 ))}
               </div>
@@ -219,7 +230,7 @@ export default function HomePage() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
               باقة نوفيا تجمع 3 تقنيات تشتغل مع بعض
             </h2>
-            <p className="text-white/75 text-sm leading-relaxed max-w-lg mx-auto">
+            <p className="text-white/75 text-base leading-relaxed max-w-lg mx-auto">
               لا معالجة سطحية — شغل من الداخل. الجل الناقل يوصّل الطاقة لعمق الجلد بأمان.
             </p>
           </div>
@@ -235,8 +246,8 @@ export default function HomePage() {
                 <div key={m.tech} className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm flex gap-3 items-start">
                   <span className="text-2xl flex-shrink-0">{m.icon}</span>
                   <div>
-                    <h3 className="font-bold text-sm mb-1">{m.tech}</h3>
-                    <p className="text-white/65 text-xs leading-relaxed">{m.desc}</p>
+                    <h3 className="font-bold text-base mb-1">{m.tech}</h3>
+                    <p className="text-white/65 text-sm leading-relaxed">{m.desc}</p>
                   </div>
                 </div>
               ))}
@@ -443,14 +454,14 @@ export default function HomePage() {
             style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
           >
             {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="flex-none w-52 sm:w-64 snap-start rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-accent/60 bg-white">
+              <div key={n} className="flex-none w-[78vw] sm:w-72 snap-start rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-accent/60 bg-white">
                 <div className="relative w-full aspect-[3/4]">
                   <Image
                     src={`/images/ba/before-after-${n}.webp`}
                     alt={`نتيجة العميلة ${n}`}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 640px) 208px, 256px"
+                    sizes="(max-width: 640px) 78vw, 288px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary/55 via-transparent to-transparent" />
                   <div className="absolute bottom-3 inset-x-3 flex items-center justify-between">
@@ -539,21 +550,21 @@ export default function HomePage() {
       <section className="py-12 bg-bg-alt">
         <div className="max-w-md mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative w-32 h-32 flex-shrink-0">
+            <div className="relative w-48 h-48 flex-shrink-0">
               <Image
                 src="/images/lp/guarantee-badge.webp"
                 alt="ضمان 30 يوم أو استرجاع كامل"
                 fill
-                className="object-contain"
-                sizes="128px"
+                className="object-contain drop-shadow-lg"
+                sizes="192px"
               />
             </div>
             <div className="text-center sm:text-right">
-              <span className="inline-block bg-nuvia-success/10 text-nuvia-success text-xs font-bold px-3 py-1 rounded-full mb-2">
+              <span className="inline-block bg-nuvia-success/10 text-nuvia-success text-sm font-bold px-3 py-1.5 rounded-full mb-3">
                 نتائج خلال 30 يوم أو استرجاع كامل
               </span>
-              <h2 className="text-lg font-bold text-secondary mb-2">ضمان الرضا — 30 يوم كامل</h2>
-              <p className="text-nuvia-text text-sm leading-relaxed">
+              <h2 className="text-xl font-bold text-secondary mb-2">ضمان الرضا — 30 يوم كامل</h2>
+              <p className="text-nuvia-text text-base leading-relaxed">
                 استخدمي الباقة 30 يوم بالطريقة الصحيحة، وإذا لا شفتِ فرق — نرجع لكِ مبلغك كاملاً بدون أي أسئلة. الخطأ علينا، لا عليكِ.
               </p>
             </div>
@@ -579,8 +590,8 @@ export default function HomePage() {
                 <div key={s.title} className="flex items-start gap-3 bg-bg-alt rounded-xl p-4">
                   <span className="text-2xl flex-shrink-0">{s.icon}</span>
                   <div>
-                    <p className="font-bold text-secondary text-sm">{s.title}</p>
-                    <p className="text-nuvia-light text-xs leading-relaxed mt-0.5">{s.desc}</p>
+                    <p className="font-bold text-secondary text-base">{s.title}</p>
+                    <p className="text-nuvia-light text-sm leading-relaxed mt-0.5">{s.desc}</p>
                   </div>
                 </div>
               ))}
