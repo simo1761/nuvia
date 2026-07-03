@@ -70,6 +70,7 @@ async function sendToCod(order: Order): Promise<string | null> {
     console.warn('[COD] COD_API_KEY not configured — skipping lead.');
     return null;
   }
+  console.log('[COD] Using key prefix:', COD_API_KEY.slice(0, 8), '— length:', COD_API_KEY.length);
 
   // COD expects E.164 without the + prefix: "9665XXXXXXXX"
   const phone = order.phone.replace(/^\+/, '');
