@@ -1,72 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { appendOrderToSheet } from '@/lib/google-sheets';
+import fs from 'fs';
+import path from 'path';
+
+// Configurable via env var — set ORDERS_FILE=/app/data/orders.json in Easypanel
+// to point at a persistent mounted volume.
+const ORDERS_FILE = process.env.ORDERS_FILE ?? path.join(process.cwd(), 'orders.json');
+
+function loadOrders(): Order[] {
+  try {
+    if (fs.existsSync(ORDERS_FILE)) {
+      return JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8')) as Order[];
+    }
+  } catch {
+    // corrupted file — start fresh
+  }
+  return [];
+}
+
+function saveOrders(orders: Order[]): void {
+  const dir = path.dirname(ORDERS_FILE);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
+}
+
+export interface Order {
+  id: string;
+  createdAt: string;
+  name: string;
+  phone: string;
+  city: string;
+  country: string;
+  sku: string;
+  product: string;
+  price: number;
+  currency: string;
+  status: 'new' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+}
 
 export async function POST(req: NextRequest) {
-  console.log('[ORDER] Request received');
   try {
     const body = await req.json();
-    console.log('[ORDER] Body:', JSON.stringify(body, null, 2));
-
-    const { name, phone, city, country, sku, price, currency } = body;
+    const { name, phone, city, country, sku, product, price, currency } = body;
 
     if (!name || !phone || !city || !country || !sku) {
-      console.log('[ORDER] Validation failed — missing fields:', { name: !!name, phone: !!phone, city: !!city, country: !!country, sku: !!sku });
-      return NextResponse.json(
-        { error: 'يرجى ملء جميع الحقول المطلوبة' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'يرجى ملء جميع الحقول المطلوبة' }, { status: 400 });
     }
 
     const cleanPhone = phone.replace(/[\s\-]/g, '');
     if (!/^\+?\d{9,15}$/.test(cleanPhone)) {
-      console.log('[ORDER] Phone validation failed:', cleanPhone);
-      return NextResponse.json(
-        { error: 'رقم الهاتف غير صحيح' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'رقم الهاتف غير صحيح' }, { status: 400 });
     }
 
-    // ── 1. Google Sheets (primary, always attempted) ──────────────
-    console.log('[ORDER] Calling appendOrderToSheet...');
-    await appendOrderToSheet({ name, phone: cleanPhone, city, country, sku, price, currency });
-    console.log('[ORDER] Google Sheets — row appended');
+    const order: Order = {
+      id: `NV-${Date.now().toString(36).toUpperCase()}`,
+      createdAt: new Date().toISOString(),
+      name,
+      phone: cleanPhone,
+      city,
+      country,
+      sku,
+      product: product ?? sku,
+      price: price ?? 239,
+      currency: currency ?? 'SAR',
+      status: 'new',
+    };
 
-    // ── 2. Backend DB + CAPI (optional, fire-and-forget) ─────────
-    const backendUrl = process.env.BACKEND_URL;
-    if (backendUrl) {
-      const productName = body.product ?? sku;
-      fetch(`${backendUrl}/api/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: name,
-          phone: cleanPhone,
-          city,
-          productSlug: sku,
-          productName,
-          price: price ?? 0,
-          fbclid: body.fbclid ?? null,
-          fbp: body.fbp ?? null,
-          fbc: body.fbc ?? null,
-          ipAddress: req.headers.get('x-forwarded-for') ?? req.ip ?? null,
-          userAgent: req.headers.get('user-agent') ?? null,
-        }),
-      })
-        .then(r => r.ok
-          ? console.log('[ORDER] Backend DB — order saved')
-          : r.text().then(t => console.warn('[ORDER] Backend returned', r.status, t))
-        )
-        .catch(err => console.warn('[ORDER] Backend unreachable:', (err as Error).message));
-    }
+    const orders = loadOrders();
+    orders.push(order);
+    saveOrders(orders);
 
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    const stack   = err instanceof Error ? err.stack   : undefined;
-    console.error('[ORDER] Error:', message);
-    if (stack) console.error('[ORDER] Stack:', stack);
+    console.log('[ORDER] Saved:', order.id, name, cleanPhone, city);
+    return NextResponse.json({ success: true, orderId: order.id }, { status: 200 });
+  } catch (err) {
+    console.error('[ORDER] Error:', err);
     return NextResponse.json(
-      { error: 'حدث خطأ في معالجة الطلب. يرجى المحاولة مرة أخرى.' },
+      { error: 'حدث خطأ في حفظ الطلب. يرجى المحاولة مرة أخرى.' },
       { status: 500 }
     );
   }
