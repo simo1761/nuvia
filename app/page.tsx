@@ -298,13 +298,13 @@ export default function HomePage() {
             />
             {/* Text overlays */}
             <div className="absolute inset-0 flex">
-              <div className="w-1/2 flex flex-col justify-end p-4 sm:p-6 bg-gradient-to-t from-black/50">
-                <span className="text-white font-bold text-sm sm:text-base font-tajawal">في العيادة</span>
-                <span className="text-white/75 text-xs font-tajawal">مواعيد، تكلفة عالية، إحراج من الكشف</span>
-              </div>
               <div className="w-1/2 flex flex-col justify-end p-4 sm:p-6 bg-gradient-to-t from-primary/60">
                 <span className="text-white font-bold text-sm sm:text-base font-tajawal">في بيتكِ ✨</span>
                 <span className="text-white/90 text-xs font-tajawal">خصوصية تامة، على راحتكِ، وبتكلفة جلسة واحدة</span>
+              </div>
+              <div className="w-1/2 flex flex-col justify-end p-4 sm:p-6 bg-gradient-to-t from-black/50">
+                <span className="text-white font-bold text-sm sm:text-base font-tajawal">في العيادة</span>
+                <span className="text-white/75 text-xs font-tajawal">مواعيد، تكلفة عالية، إحراج من الكشف</span>
               </div>
             </div>
           </div>
@@ -468,8 +468,8 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary/55 via-transparent to-transparent" />
                   <div className="absolute bottom-3 inset-x-3 flex items-center justify-between">
-                    <span className="bg-primary text-white text-[10px] font-bold px-2.5 py-1 rounded-full font-tajawal">بعد 4 أسابيع</span>
                     <span className="bg-black/50 text-white text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-sm font-tajawal">قبل</span>
+                    <span className="bg-primary text-white text-[10px] font-bold px-2.5 py-1 rounded-full font-tajawal">بعد 4 أسابيع</span>
                   </div>
                 </div>
               </div>
