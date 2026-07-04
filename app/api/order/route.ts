@@ -15,14 +15,10 @@ const ORDERS_FILE =
     : '/tmp/nuvia-orders.json');
 
 // ---------------------------------------------------------------------------
-// COD Network — called directly so we can send gel at price 0
-// Set these in Easypanel env vars (copy COD_API_KEY from bawadiycoffee):
-//   COD_API_KEY=<your key>
-//   COD_DEVICE_SKU=RF1NUVMSST   (replace with real SKU when ready)
-//   COD_GEL_SKU=ULT250SNDGM     (replace with real SKU when ready)
+// COD Network
 // ---------------------------------------------------------------------------
-const COD_API_URL   = process.env.COD_API_URL   ?? 'https://api.cod.network/v2';
-const COD_API_KEY   = process.env.COD_API_KEY   ?? '';
+const COD_API_URL    = process.env.COD_API_URL    ?? 'https://api.cod.network/v2';
+const COD_API_KEY    = process.env.COD_API_KEY    ?? '';
 const COD_DEVICE_SKU = process.env.COD_DEVICE_SKU ?? 'RF1NUVMSST';
 const COD_GEL_SKU    = process.env.COD_GEL_SKU    ?? 'ULT250SNDGM';
 const COD_TEST_MODE  = process.env.COD_TEST_MODE === 'true';
@@ -39,6 +35,8 @@ export interface Order {
   price: number;
   currency: string;
   status: 'new' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  sentToCod: boolean;
+  codNote?: string;   // reason if not sent, or lead ID if sent
   codLeadId?: string;
 }
 
@@ -47,9 +45,7 @@ function loadOrders(): Order[] {
     if (existsSync(ORDERS_FILE)) {
       return JSON.parse(readFileSync(ORDERS_FILE, 'utf8')) as Order[];
     }
-  } catch {
-    // corrupted file — start fresh
-  }
+  } catch { /* corrupted file — start fresh */ }
   return [];
 }
 
@@ -59,22 +55,18 @@ function saveOrders(orders: Order[]): void {
   writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
 }
 
-// ---------------------------------------------------------------------------
-// Forward to COD Network as a lead (fire-and-forget)
-// COD Network accepts price: 0 for bundled items (gel = free gift).
-// We do NOT go through bawadiycoffee because its Fastify schema enforces
-// unitPrice minimum: 1, which would reject the gel at 0 SAR.
-// ---------------------------------------------------------------------------
+// Returns true if this phone has already been sent to COD Network before
+function isReturningCustomer(phone: string, orders: Order[]): boolean {
+  return orders.some(o => o.phone === phone && o.sentToCod === true);
+}
+
 async function sendToCod(order: Order): Promise<string | null> {
   if (!COD_API_KEY) {
     console.warn('[COD] COD_API_KEY not configured — skipping lead.');
     return null;
   }
-  console.log('[COD] Using key prefix:', COD_API_KEY.slice(0, 8), '— length:', COD_API_KEY.length);
 
-  // COD expects E.164 without the + prefix: "9665XXXXXXXX"
-  const phone = order.phone.replace(/^\+/, '');
-
+  const phone   = order.phone.replace(/^\+/, '');
   const payload = {
     phone,
     country: order.country,
@@ -104,8 +96,8 @@ async function sendToCod(order: Order): Promise<string | null> {
   try { json = JSON.parse(text) as Record<string, unknown>; } catch { /* ignore */ }
 
   if (res.ok) {
-    const data = json.data as Record<string, unknown> | undefined;
-    const leadId = data?.id ? String(data.id) : null;
+    const data   = json.data as Record<string, unknown> | undefined;
+    const leadId = data?.id ? String(data.id) : 'sent';
     console.log('[COD] Lead created:', leadId, '— order:', order.id);
     return leadId;
   }
@@ -140,6 +132,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'رقم الهاتف غير صحيح' }, { status: 400 });
     }
 
+    // Check for returning customer BEFORE saving
+    const existingOrders  = loadOrders();
+    const returning       = isReturningCustomer(cleanPhone, existingOrders);
+
     const order: Order = {
       id:        `NV-${Date.now().toString(36).toUpperCase()}`,
       createdAt: new Date().toISOString(),
@@ -152,60 +148,49 @@ export async function POST(req: NextRequest) {
       price:    typeof price === 'number' ? price : 239,
       currency: currency ?? 'SAR',
       status:   'new',
+      sentToCod: false,
+      codNote:   returning ? 'returning_customer' : 'pending',
     };
 
-    // Save locally first
-    const orders = loadOrders();
-    orders.push(order);
-    saveOrders(orders);
-    console.log('[ORDER] Saved to', ORDERS_FILE, '—', order.id, name, cleanPhone, city);
+    existingOrders.push(order);
+    saveOrders(existingOrders);
+    console.log('[ORDER] Saved —', order.id, name, cleanPhone, city, returning ? '(returning)' : '(new)');
 
-    // Fire-and-forget — CAPI Purchase (server-side Meta signal, highest quality)
+    // CAPI — always fired regardless of returning status
     if (capiEventId) {
       const firstName = name.split(/\s+/)[0] ?? name;
       sendPurchaseCapi({
         eventId: capiEventId,
-        user: {
-          phone:       cleanPhone,
-          firstName,
-          city,
-          countryCode: country,
-          clientIp,
-          clientUa,
-          fbp:         fbp ?? '',
-          fbc:         fbc ?? '',
-        },
-        custom: {
-          value:      order.price,
-          currency:   order.currency,
-          contentIds: [order.sku],
-          orderId:    order.id,
-        },
+        user: { phone: cleanPhone, firstName, city, countryCode: country, clientIp, clientUa, fbp: fbp ?? '', fbc: fbc ?? '' },
+        custom: { value: order.price, currency: order.currency, contentIds: [order.sku], orderId: order.id },
       }).catch(err => console.error('[CAPI] Purchase error:', err));
     }
 
-    // Fire-and-forget to COD Network (never blocks the customer response)
-    sendToCod(order)
-      .then((leadId) => {
-        if (leadId) {
-          // Update the stored order with the COD lead ID
+    // COD Network — only for first-time customers
+    if (returning) {
+      console.log('[COD] Skipping — returning customer:', cleanPhone);
+    } else {
+      sendToCod(order)
+        .then((leadId) => {
           try {
             const all = loadOrders();
             const idx = all.findIndex(o => o.id === order.id);
-            if (idx !== -1) { all[idx].codLeadId = leadId; saveOrders(all); }
+            if (idx !== -1) {
+              all[idx].sentToCod = leadId !== null;
+              all[idx].codLeadId = leadId ?? undefined;
+              all[idx].codNote   = leadId ? `lead:${leadId}` : 'cod_error';
+              saveOrders(all);
+            }
           } catch { /* non-critical */ }
-        }
-      })
-      .catch(err => console.error('[COD] Unhandled error:', err));
+        })
+        .catch(err => console.error('[COD] Unhandled error:', err));
+    }
 
     return NextResponse.json({ success: true, orderId: order.id }, { status: 200 });
 
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[ORDER] Failed:', msg);
-    return NextResponse.json(
-      { error: `حدث خطأ في حفظ الطلب: ${msg}` },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: `حدث خطأ في حفظ الطلب: ${msg}` }, { status: 500 });
   }
 }

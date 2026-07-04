@@ -101,7 +101,7 @@ export default function AdminOrdersPage({ searchParams }: Props) {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    {['رقم الطلب','التاريخ','الاسم','الهاتف','المدينة','الدولة','المنتج','السعر','الحالة'].map(h => (
+                    {['رقم الطلب','التاريخ','الاسم','الهاتف','المدينة','الدولة','المنتج','السعر','الحالة','COD'].map(h => (
                       <th key={h} className="text-right px-4 py-3 text-gray-600 font-semibold whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -121,6 +121,16 @@ export default function AdminOrdersPage({ searchParams }: Props) {
                         <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[o.status]}`}>
                           {STATUS_LABELS[o.status]}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {o.sentToCod
+                          ? <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">✓ أرسل</span>
+                          : o.codNote === 'returning_customer'
+                            ? <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">عميلة متكررة</span>
+                            : o.codNote === 'cod_error'
+                              ? <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-600">خطأ</span>
+                              : <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-600">معلق</span>
+                        }
                       </td>
                     </tr>
                   ))}
