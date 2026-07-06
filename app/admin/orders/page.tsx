@@ -101,7 +101,7 @@ export default function AdminOrdersPage({ searchParams }: Props) {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    {['رقم الطلب','التاريخ','الاسم','الهاتف','المدينة','الدولة','المنتج','السعر','الحالة','COD'].map(h => (
+                    {['رقم الطلب','التاريخ','الاسم','الهاتف','المدينة','الدولة','المنتج','السعر','الحالة','COD','حملة','Content ID'].map(h => (
                       <th key={h} className="text-right px-4 py-3 text-gray-600 font-semibold whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -131,6 +131,14 @@ export default function AdminOrdersPage({ searchParams }: Props) {
                               ? <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-600">خطأ</span>
                               : <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-600">معلق</span>
                         }
+                      </td>
+                      <td className="px-4 py-3 text-xs text-gray-500 max-w-[180px] truncate" title={o.utmCampaign ?? ''}>
+                        {o.utmCampaign
+                          ? <span className="font-mono">{o.utmCampaign}</span>
+                          : <span className="text-gray-300">—</span>}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500 whitespace-nowrap">
+                        {o.utmContent ?? <span className="text-gray-300">—</span>}
                       </td>
                     </tr>
                   ))}

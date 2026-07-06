@@ -1,7 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
+// Read UTMs from URL at landing, persist in sessionStorage so they survive reloads
+function captureUtms(): { utmCampaign: string; utmContent: string } {
+  const stored = sessionStorage.getItem('nuvia_utms');
+  if (stored) {
+    try { return JSON.parse(stored) as { utmCampaign: string; utmContent: string }; }
+    catch { /* ignore */ }
+  }
+  const p = new URLSearchParams(window.location.search);
+  const utms = { utmCampaign: p.get('utm_campaign') ?? '', utmContent: p.get('utm_content') ?? '' };
+  if (utms.utmCampaign || utms.utmContent) {
+    sessionStorage.setItem('nuvia_utms', JSON.stringify(utms));
+  }
+  return utms;
+}
 
 const PHONE_RULES: Record<string, { dialCode: string; digits: number; starts: string[] }> = {
   SA: { dialCode: '+966', digits: 9, starts: ['5'] },
@@ -49,6 +64,15 @@ export default function LPOrderForm() {
   const [phoneConfirmed, setPhoneConfirmed] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [utmCampaign, setUtmCampaign] = useState('');
+  const [utmContent, setUtmContent] = useState('');
+
+  // Capture UTMs from URL on mount — sessionStorage ensures they persist across reloads
+  useEffect(() => {
+    const { utmCampaign, utmContent } = captureUtms();
+    setUtmCampaign(utmCampaign);
+    setUtmContent(utmContent);
+  }, []);
 
   // Strip leading 0 before validation — accept "05..." and "5..." equally
   const phoneStripped = phone.replace(/^0/, '');
@@ -111,6 +135,8 @@ export default function LPOrderForm() {
           capiEventId,
           fbp,
           fbc,
+          utmCampaign: utmCampaign || undefined,
+          utmContent:  utmContent  || undefined,
         }),
       });
 
