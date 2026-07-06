@@ -55,9 +55,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ar" dir="rtl" className={tajawal.variable}>
       <head>
-        {/* Preconnect to Facebook CDN — reduces pixel load latency */}
+        {/* Preconnect to Facebook CDN */}
         <link rel="preconnect" href="https://connect.facebook.net" />
-        <link rel="preconnect" href="https://www.facebook.com" />
+        {/* LCP hero preloads — media-conditional so each device only fetches its own hero */}
+        <link rel="preload" as="image" href="/images/lp/hero-pack-mobile.webp" media="(max-width: 1023px)" fetchPriority="high" />
+        <link rel="preload" as="image" href="/images/lp/hero-pack.webp" media="(min-width: 1024px)" fetchPriority="high" />
       </head>
       <body className="font-tajawal bg-bg text-nuvia-text antialiased">
         <LayoutShell>{children}</LayoutShell>

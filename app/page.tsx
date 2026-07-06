@@ -1,14 +1,16 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import LPReviewsCarousel from '@/components/landing/LPReviewsCarousel';
-import LPOrderForm       from '@/components/landing/LPOrderForm';
-import LPFAQAccordion    from '@/components/landing/LPFAQAccordion';
 
-// ssr: false only for components that use browser-only APIs
+// ssr: false — uses browser-only APIs (window.history, window.fbq)
 const LPStoryStrip    = dynamic(() => import('@/components/landing/LPStoryStrip'), { ssr: false });
 const LPStickyCTA     = dynamic(() => import('@/components/landing/LPStickyCTA'),  { ssr: false });
 const MetaViewContent = dynamic(() => import('@/components/tracking/MetaViewContent'), { ssr: false });
+
+// SSR preserved but JS chunk loaded lazily — reduces initial bundle / TBT
+const LPReviewsCarousel = dynamic(() => import('@/components/landing/LPReviewsCarousel'));
+const LPOrderForm       = dynamic(() => import('@/components/landing/LPOrderForm'));
+const LPFAQAccordion    = dynamic(() => import('@/components/landing/LPFAQAccordion'));
 
 export const metadata: Metadata = {
   title: 'باقة RF لشد الجلد وعلاج السيلوليت — نوفيا كلينيك',
@@ -49,6 +51,7 @@ export default function HomePage() {
               fill
               className="object-cover object-center"
               priority
+              unoptimized
               sizes="100vw"
             />
             {/* Gradient: only touches bottom ~38% to bridge into dark text section below */}
@@ -159,6 +162,7 @@ export default function HomePage() {
                   fill
                   className="object-contain drop-shadow-2xl"
                   priority
+                  unoptimized
                   sizes="(max-width: 1280px) 50vw, 640px"
                 />
               </div>
