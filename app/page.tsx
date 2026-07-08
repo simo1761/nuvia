@@ -67,12 +67,7 @@ export default function HomePage() {
               باقة RF لشد الجلد<br />
               <span className="text-primary">ومحاربة السيلوليت</span>
             </h1>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-white/40 text-sm line-through">499</span>
-                <span className="text-primary font-bold text-3xl leading-none">239</span>
-                <span className="text-white/65 text-base">ريال</span>
-              </div>
+            <div className="flex items-center mb-3">
               {/* Stars — clickable to scroll to reviews section */}
               <a href="#reviews" className="flex items-center gap-1.5">
                 <Stars />
@@ -136,10 +131,6 @@ export default function HomePage() {
                 <Stars />
                 <span className="text-white/80 font-semibold">4.8/5</span>
                 <span className="text-white/45 text-sm">(+124 تقييم)</span>
-              </div>
-              <div className="flex items-baseline gap-3 mb-6">
-                <span className="text-white/40 text-base line-through">499 ريال</span>
-                <span className="text-primary font-bold text-4xl">239 <span className="text-xl font-normal text-white/70">ريال</span></span>
               </div>
               <a
                 href="#order"
