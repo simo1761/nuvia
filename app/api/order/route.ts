@@ -79,10 +79,6 @@ async function sendToCod(order: Order): Promise<string | null> {
     ],
   };
 
-  // Forward UTMs to COD Network so they appear in the UTMs column
-  if (order.utmCampaign) payload.utm_campaign = order.utmCampaign;
-  if (order.utmContent)  payload.utm_content  = order.utmContent;
-
   if (COD_TEST_MODE) {
     console.log('[COD-TEST] Would send to /seller/leads:', JSON.stringify(payload));
     return 'TEST-LEAD';
