@@ -38,8 +38,11 @@ export interface Order {
   sentToCod: boolean;
   codNote?: string;
   codLeadId?: string;
+  utmSource?: string;
+  utmMedium?: string;
   utmCampaign?: string;
   utmContent?: string;
+  utmTerm?: string;
 }
 
 function loadOrders(): Order[] {
@@ -79,6 +82,13 @@ async function sendToCod(order: Order): Promise<string | null> {
     ],
   };
 
+  // Forward UTMs as-is — only set fields that were actually captured
+  if (order.utmSource)   payload.utm_source   = order.utmSource;
+  if (order.utmMedium)   payload.utm_medium   = order.utmMedium;
+  if (order.utmCampaign) payload.utm_campaign = order.utmCampaign;
+  if (order.utmContent)  payload.utm_content  = order.utmContent;
+  if (order.utmTerm)     payload.utm_term     = order.utmTerm;
+
   if (COD_TEST_MODE) {
     console.log('[COD-TEST] Would send to /seller/leads:', JSON.stringify(payload));
     return 'TEST-LEAD';
@@ -117,12 +127,13 @@ export async function POST(req: NextRequest) {
     const {
       name, phone, city, country, sku, product, price, currency,
       capiEventId, fbp, fbc,
-      utmCampaign, utmContent,
+      utmSource, utmMedium, utmCampaign, utmContent, utmTerm,
     } = body as {
       name?: string; phone?: string; city?: string; country?: string;
       sku?: string; product?: string; price?: number; currency?: string;
       capiEventId?: string; fbp?: string; fbc?: string;
-      utmCampaign?: string; utmContent?: string;
+      utmSource?: string; utmMedium?: string; utmCampaign?: string;
+      utmContent?: string; utmTerm?: string;
     };
 
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0].trim()
@@ -157,15 +168,18 @@ export async function POST(req: NextRequest) {
       status:   'new',
       sentToCod: false,
       codNote:   returning ? 'returning_customer' : 'pending',
+      utmSource:   utmSource   || undefined,
+      utmMedium:   utmMedium   || undefined,
       utmCampaign: utmCampaign || undefined,
       utmContent:  utmContent  || undefined,
+      utmTerm:     utmTerm     || undefined,
     };
 
     existingOrders.push(order);
     saveOrders(existingOrders);
     console.log('[ORDER] Saved —', order.id, name, cleanPhone, city,
       returning ? '(returning)' : '(new)',
-      order.utmCampaign ? `[utm: ${order.utmCampaign}]` : '');
+      order.utmCampaign ? `[campaign: ${order.utmCampaign}]` : '[no utm]');
 
     // CAPI — always fired regardless of returning status
     if (capiEventId) {

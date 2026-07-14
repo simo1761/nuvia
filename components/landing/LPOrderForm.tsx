@@ -3,19 +3,46 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Read UTMs from URL at landing, persist in sessionStorage so they survive reloads
-function captureUtms(): { utmCampaign: string; utmContent: string } {
-  const stored = sessionStorage.getItem('nuvia_utms');
-  if (stored) {
-    try { return JSON.parse(stored) as { utmCampaign: string; utmContent: string }; }
-    catch { /* ignore */ }
+const UTM_STORAGE_KEY = 'nuvia_utms';
+const UTM_TTL_MS      = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+interface Utms {
+  utmSource: string; utmMedium: string; utmCampaign: string;
+  utmContent: string; utmTerm: string;
+  capturedAt: number;
+}
+
+// Capture all 5 UTM params from URL and persist in localStorage for 30 days.
+// On revisit without UTMs in URL, returns stored values if still fresh.
+function captureUtms(): Omit<Utms, 'capturedAt'> {
+  const empty = { utmSource: '', utmMedium: '', utmCampaign: '', utmContent: '', utmTerm: '' };
+  try {
+    // Check localStorage first
+    const raw = localStorage.getItem(UTM_STORAGE_KEY);
+    if (raw) {
+      const stored = JSON.parse(raw) as Utms;
+      if (Date.now() - stored.capturedAt < UTM_TTL_MS) {
+        const { capturedAt: _, ...utms } = stored;
+        return utms;
+      }
+    }
+    // Read from current URL
+    const p = new URLSearchParams(window.location.search);
+    const utms = {
+      utmSource:   p.get('utm_source')   ?? '',
+      utmMedium:   p.get('utm_medium')   ?? '',
+      utmCampaign: p.get('utm_campaign') ?? '',
+      utmContent:  p.get('utm_content')  ?? '',
+      utmTerm:     p.get('utm_term')     ?? '',
+    };
+    // Only persist if at least one UTM is present
+    if (Object.values(utms).some(Boolean)) {
+      localStorage.setItem(UTM_STORAGE_KEY, JSON.stringify({ ...utms, capturedAt: Date.now() }));
+    }
+    return utms;
+  } catch {
+    return empty;
   }
-  const p = new URLSearchParams(window.location.search);
-  const utms = { utmCampaign: p.get('utm_campaign') ?? '', utmContent: p.get('utm_content') ?? '' };
-  if (utms.utmCampaign || utms.utmContent) {
-    sessionStorage.setItem('nuvia_utms', JSON.stringify(utms));
-  }
-  return utms;
 }
 
 const PHONE_RULES: Record<string, { dialCode: string; digits: number; starts: string[] }> = {
@@ -64,15 +91,10 @@ export default function LPOrderForm() {
   const [phoneConfirmed, setPhoneConfirmed] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [utmCampaign, setUtmCampaign] = useState('');
-  const [utmContent, setUtmContent] = useState('');
+  const [utms, setUtms] = useState({ utmSource: '', utmMedium: '', utmCampaign: '', utmContent: '', utmTerm: '' });
 
-  // Capture UTMs from URL on mount — sessionStorage ensures they persist across reloads
-  useEffect(() => {
-    const { utmCampaign, utmContent } = captureUtms();
-    setUtmCampaign(utmCampaign);
-    setUtmContent(utmContent);
-  }, []);
+  // Capture UTMs on mount — reads from URL or localStorage (30-day persistence)
+  useEffect(() => { setUtms(captureUtms()); }, []);
 
   // Strip leading 0 before validation — accept "05..." and "5..." equally
   const phoneStripped = phone.replace(/^0/, '');
@@ -135,8 +157,11 @@ export default function LPOrderForm() {
           capiEventId,
           fbp,
           fbc,
-          utmCampaign: utmCampaign || undefined,
-          utmContent:  utmContent  || undefined,
+          utmSource:   utms.utmSource   || undefined,
+          utmMedium:   utms.utmMedium   || undefined,
+          utmCampaign: utms.utmCampaign || undefined,
+          utmContent:  utms.utmContent  || undefined,
+          utmTerm:     utms.utmTerm     || undefined,
         }),
       });
 
