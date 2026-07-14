@@ -452,16 +452,16 @@ export default function HomePage() {
             style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
           >
             {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="flex-none w-[78vw] sm:w-72 snap-start rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-accent/60 bg-white">
-                <div className="relative w-full aspect-[3/4]">
+              <div key={n} className="flex-none w-[88vw] sm:w-[420px] snap-start rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-accent/60 bg-white">
+                <div className="relative w-full aspect-[4/3]">
                   <Image
                     src={`/images/ba/before-after-${n}.webp`}
                     alt={`نتيجة العميلة ${n}`}
                     fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 78vw, 288px"
+                    className="object-cover object-center"
+                    sizes="(max-width: 640px) 88vw, 420px"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/55 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/40 via-transparent to-transparent" />
                   <div className="absolute bottom-3 inset-x-3 flex items-center justify-between">
                     <span className="bg-black/50 text-white text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-sm font-tajawal">قبل</span>
                     <span className="bg-primary text-white text-[10px] font-bold px-2.5 py-1 rounded-full font-tajawal">بعد 4 أسابيع</span>
