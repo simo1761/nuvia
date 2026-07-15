@@ -82,12 +82,21 @@ async function sendToCod(order: Order): Promise<string | null> {
     ],
   };
 
-  // Forward UTMs as-is — only set fields that were actually captured
-  if (order.utmSource)   payload.utm_source   = order.utmSource;
-  if (order.utmMedium)   payload.utm_medium   = order.utmMedium;
-  if (order.utmCampaign) payload.utm_campaign = order.utmCampaign;
-  if (order.utmContent)  payload.utm_content  = order.utmContent;
-  if (order.utmTerm)     payload.utm_term     = order.utmTerm;
+  // Sanitize UTMs before forwarding:
+  // - utm_campaign containing "test" → replace with prod campaign name
+  // - utm_term → strip the word "test" (e.g. "test4_image" → "4_image")
+  const cleanCampaign = order.utmCampaign
+    ? (/test/i.test(order.utmCampaign) ? 'NUVIA_RF1NUVMSSG_SCALL_CREA_V1' : order.utmCampaign)
+    : undefined;
+  const cleanTerm = order.utmTerm
+    ? order.utmTerm.replace(/test/gi, '')
+    : undefined;
+
+  if (order.utmSource)  payload.utm_source   = order.utmSource;
+  if (order.utmMedium)  payload.utm_medium   = order.utmMedium;
+  if (cleanCampaign)    payload.utm_campaign = cleanCampaign;
+  if (order.utmContent) payload.utm_content  = order.utmContent;
+  if (cleanTerm)        payload.utm_term     = cleanTerm;
 
   if (COD_TEST_MODE) {
     console.log('[COD-TEST] Would send to /seller/leads:', JSON.stringify(payload));
