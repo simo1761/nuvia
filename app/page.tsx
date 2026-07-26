@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 // ssr: false — uses browser-only APIs (window.history, window.fbq)
 const LPStoryStrip    = dynamic(() => import('@/components/landing/LPStoryStrip'), { ssr: false });
@@ -31,6 +33,10 @@ function Stars({ count = 5 }: { count?: number }) {
 }
 
 export default function HomePage() {
+  // Geo-restriction: redirect non-SA visitors (header set by Cloudflare proxy)
+  const country = headers().get('cf-ipcountry');
+  if (country && country !== 'SA') redirect('/not-available');
+
   return (<>
     <MetaViewContent />
     <div className="font-tajawal" dir="rtl">
