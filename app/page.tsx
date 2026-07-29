@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 // ssr: false — uses browser-only APIs (window.history, window.fbq)
-const LPStoryStrip    = dynamic(() => import('@/components/landing/LPStoryStrip'), { ssr: false });
 const LPStickyCTA     = dynamic(() => import('@/components/landing/LPStickyCTA'),  { ssr: false });
 const MetaViewContent = dynamic(() => import('@/components/tracking/MetaViewContent'), { ssr: false });
 
@@ -162,12 +161,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════ */}
-      {/* 2. STORY STRIP                                            */}
-      {/* ══════════════════════════════════════════════════════════ */}
-      <LPStoryStrip />
-
-      {/* ══════════════════════════════════════════════════════════ */}
-      {/* 3. EMPATHY                                                */}
+      {/* 2. EMPATHY                                                */}
       {/* ══════════════════════════════════════════════════════════ */}
       <section className="py-14 bg-white">
         <div className="max-w-4xl mx-auto px-4">
