@@ -172,7 +172,7 @@ export async function POST(req: NextRequest) {
       country,
       sku,
       product:  product ?? sku,
-      price:    typeof price === 'number' ? price : 239,
+      price:    typeof price === 'number' ? price : 399,
       currency: currency ?? 'SAR',
       status:   'new',
       sentToCod: false,

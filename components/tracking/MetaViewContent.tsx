@@ -10,7 +10,7 @@ export default function MetaViewContent() {
       if (fbq) fbq('track', 'ViewContent', {
         content_ids:  ['NV-RF-005'],
         content_type: 'product',
-        value:        239,
+        value:        399,
         currency:     'SAR',
       });
     }, 2000);

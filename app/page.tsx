@@ -495,7 +495,7 @@ export default function HomePage() {
             شو موجود في الباقة؟
           </h2>
           <p className="text-center text-nuvia-light text-sm mb-8">
-            القيمة الكاملة 499 ريال — اليوم بس 239 ريال
+            القيمة الكاملة 499 ريال — اليوم بس 399 ريال
           </p>
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-accent/60">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -620,7 +620,7 @@ export default function HomePage() {
           <span className="text-4xl block mb-4">✨</span>
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">جاهزة تبدأين؟</h2>
           <p className="text-white/75 text-sm leading-relaxed mb-3">
-            باقة كاملة بتقنية العيادات · 239 ريال · دفع عند الاستلام · ضمان 30 يوم
+            باقة كاملة بتقنية العيادات · 399 ريال · دفع عند الاستلام · ضمان 30 يوم
           </p>
           <p className="text-white/60 text-xs mb-8">انضمي لأكثر من 10,000 عميلة سعيدة في دول الخليج</p>
           <a

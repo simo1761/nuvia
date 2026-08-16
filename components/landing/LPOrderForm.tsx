@@ -63,7 +63,7 @@ const COUNTRIES = [
   { code: 'QA', name: 'قطر', flag: '🇶🇦' },
 ];
 
-const PACK_PRICE = 239;
+const PACK_PRICE = 399;
 const PRODUCT_LABEL = 'باقة RF — جهاز + جل التوصيل';
 
 function validatePhone(phone: string, country: string): boolean {
@@ -207,7 +207,7 @@ export default function LPOrderForm() {
               <p className="text-nuvia-light text-xs mt-0.5">جهاز RF + جل التوصيل الاحترافي</p>
               <div className="flex items-baseline gap-2 mt-2">
                 <span className="text-nuvia-light text-xs line-through">499 ريال</span>
-                <span className="text-primary font-bold text-2xl">239 <span className="text-sm font-normal">ريال</span></span>
+                <span className="text-primary font-bold text-2xl">399 <span className="text-sm font-normal">ريال</span></span>
               </div>
             </div>
             <div className="text-left flex-shrink-0">
